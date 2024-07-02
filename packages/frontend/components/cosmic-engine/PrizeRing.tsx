@@ -5,6 +5,15 @@ import DegenCard from "./DegenCard";
 import { confetti } from "@tsparticles/confetti";
 import Lottie from 'react-lottie';
 import Loader from '~~/components/cosmic-engine/AcceptLoader';
+import { Prize } from './JackpotJunction';
+interface PrizeRingProps {
+    isPrizeVisible: boolean;
+    prizeWon: Prize; 
+    handleAccept: () => void;
+    closePrizeLayer: () => void;
+    getScreenBreakpoint: () => string;
+    acceptPrize: () => void;
+}
 
 export const PrizeRing = ({
     isPrizeVisible,
@@ -13,7 +22,7 @@ export const PrizeRing = ({
     closePrizeLayer,
     getScreenBreakpoint,
     acceptPrize
-}) => {
+}: PrizeRingProps) => {
     const [isMounted, setIsMounted] = useState(true);
     const [isShaking, setIsShaking] = useState(false);
     const [fastShaking, setFastShaking] = useState(false);
