@@ -18,6 +18,7 @@ import Loader from '~~/components/cosmic-engine/AcceptLoader';
 import { JackpotBalance } from "./JackpotBalance";
 import { MediumJackpotBalance } from "./MediumJackpotBalance";
 import { formatGwei } from "viem";
+import PrizeRing from "./PrizeRing";
 
 interface JackpotWheelProps {
     wheelState: string,
@@ -112,12 +113,6 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
 
     const handleAccept = () => {
         handleIsAccepting(true);
-        setIsShaking(true);
-        confetti({
-            particleCount: 200,
-            spread: 140,
-            origin: { y: 0.5},
-        });
     }
 
     useEffect(() => {
@@ -187,7 +182,7 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
                 if(prizeWon && prizeWon.prizeType !== '0'){
                     const timer = setTimeout(() => {
                         setIsPrizeVisible(true);
-                    }, 500);
+                    }, 50);
                 }
               }  else {
                 console.log('Reached unexpected state')
@@ -222,14 +217,7 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
         return 0; 
     }
 
-    const animationData = require('~~/assets/falling-confetti.json');
 
-    const defaultOptions = {
-        loop: true,
-        autoplay: true,
-        animationData,
-        speed: 0.1
-    };
 
 
     const CircleWithSlices = () => {
@@ -353,7 +341,7 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
             const y = (offsetRadius + offsetRadius * Math.sin(angle) - bulbSize / 2) + (
                 getScreenBreakpoint() === 'def' ? 13 
                 : getScreenBreakpoint() === 'xs'? 25 
-                : getScreenBreakpoint() === 'lg'? 20
+                : getScreenBreakpoint() === 'lg'? 16
                 // : getScreenBreakpoint() === '3xl'? 22
                 : 35
             );
@@ -377,90 +365,19 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
     
         return <>{bulbs}</>;
     };
-    const [isShaking, setIsShaking] = useState(false);
-    const shakeSpring = useSpring({
-        from: { x: 0 },
-        to: isShaking
-        ? [
-            { x: 10 },
-            { x: -10 },
-            { x: 8 },
-            { x: -8 },
-            { x: 6 },
-            { x: 0 },
-          ]
-        : { x: 0 },
-        reset: isShaking,
-        onRest: async () => {
-            if(isShaking){
-                setIsShaking(false)
-                await new Promise(resolve => setTimeout(resolve,800));
-                acceptPrize()
-            }
-        },
-        config: { 
-            duration: 120,
-            mass: 1,
-            tension: 500,
-            friction: 20,
-            easing: easings.easeOutCubic,
-        },
-      })
 
     return (
         <div className="relative flex flex-col justify-end items-center h-full w-full">
-            { isPrizeVisible && prizeWon && prizeWon?.prizeType !== '0'? 
-                <div className="absolute top-12 4xl:top-0 prize-div h-full w-full z-20" style={{
-                    width: `${
-                        getScreenBreakpoint() === 'none' ? '0'
-                        : getScreenBreakpoint() === 'def'  ? '315' 
-                        : getScreenBreakpoint() === 'xs' ? '480'
-                        : getScreenBreakpoint() === 'lg' ? "600" 
-                        // : getScreenBreakpoint() === '3xl' ? "950"
-                        : "1500" //4xl and above
-                    }px`, 
-                    height: `${
-                        getScreenBreakpoint() === 'none' ? '0'
-                        : getScreenBreakpoint() === 'def' ? '315' 
-                        : getScreenBreakpoint() === 'xs'? '480' 
-                        : getScreenBreakpoint() === 'lg'? "600" 
-                        // : getScreenBreakpoint() === '3xl' ? "950"
-                        : "1500" //4xl and above
-                    }px` 
-                }}>
-                    <animated.div 
-                        className="absolute h-full w-full" 
-                        style={{
-                            ...shakeSpring,
-                        }}
-                    >
-                        <div className="absolute z-40 top-[-3.5rem] sm:top-[-2rem] left-0 w-full h-full flex justify-center items-start">
-                            <div className="h-[80%] w-[63%] relative">
-                                {
-                                    prizeWon?.prizeType === '1' ?
-                                        <ItemImage itemId={prizeWon?.prizeValue}/>
-                                    :
-                                        <DegenCard type={prizeWon?.prizeType} degen={prizeWon?.prizeValue}/>
-                                }
-                            </div>
-                        </div>
-                        <div className="absolute top-0 left-0 h-full w-full flex justify-center items-center">
-                            <div className={`overflow-hidden flex-col flex border ease-in border-[5px] bg-[#7a4f9b] rounded-[50%] h-full w-full`}>
-                                <div className="h-[70%] overflow-hidden "> 
-                                    <Lottie options={defaultOptions} height="150%" width="100%" />
-                                </div>
-                                <button className="grow z-50 accept-ring cursor-pointer flex flex-col justify-start hover:animate-none" onClick={handleAccept}>
-                                    <Loader totalCount={10} closePrizeLayer={closePrizeLayer}/>
-                                    <p className={` text-4xl font-bold`}>
-                                        ACCEPT
-                                    </p>
-                                </button>
-                            </div>
-                        </div>
-                    </animated.div>
-                </div>
-            : null
-            } 
+            {isPrizeVisible && prizeWon && prizeWon?.prizeType !== '0' ?
+                <PrizeRing 
+                    acceptPrize={acceptPrize}
+                    isPrizeVisible={isPrizeVisible}
+                    prizeWon={prizeWon}
+                    handleAccept={handleAccept}
+                    getScreenBreakpoint={getScreenBreakpoint}
+                    closePrizeLayer={closePrizeLayer}
+                />
+            : null }
             {/* 
                 75% for side banner [30% of screen]
                 30% jackpot [55% of screen]
