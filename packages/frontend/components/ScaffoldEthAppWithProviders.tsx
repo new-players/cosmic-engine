@@ -18,6 +18,8 @@ import { SessionProvider } from "next-auth/react";
 import { PrivyProvider } from '@privy-io/react-auth';
 import { getAllItemLayerData } from "@/lib/actions/ora";
 import { getBase64Image } from "@/utils/cosmic-engine";
+import { Provider } from 'react-redux';
+import store from '~~/store';
 import type { Session } from "next-auth"; 
 
   // enums/KeyboardKey.ts
@@ -94,37 +96,39 @@ export const ScaffoldEthAppWithProviders = ({ session, children }: { session: Se
 
   return (
     <>
-      <SessionProvider session={session}>
-        <WagmiProvider config={wagmiConfig}>
-          <PrivyProvider
-            appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || "clwv0y8sw05x112o2ryv6pxjx"}
-            config={{
-              // Customize Privy's appearance in your app
-              appearance: {
-                theme: 'light',
-                accentColor: '#676FFF',
-                // logo: 'https://your-logo-url',
-              },
-              // Create embedded wallets for users who don't have a wallet
-              embeddedWallets: {
-                createOnLogin: 'users-without-wallets',
-              },
-            }}            
-          >  
-            <QueryClientProvider client={queryClient}>
-              <ProgressBar />
-              <AuthKitProvider config={farcasterAuthKitConfig}>
-                <RainbowKitProvider
-                  avatar={BlockieAvatar}
-                  theme={null}
-                >
-                  {children}
-                </RainbowKitProvider>
-              </AuthKitProvider>
-            </QueryClientProvider>
-          </PrivyProvider> 
-        </WagmiProvider>
-      </SessionProvider>
+      <Provider store={store}>
+        <SessionProvider session={session}>
+          <WagmiProvider config={wagmiConfig}>
+            <PrivyProvider
+              appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || "clwv0y8sw05x112o2ryv6pxjx"}
+              config={{
+                // Customize Privy's appearance in your app
+                appearance: {
+                  theme: 'light',
+                  accentColor: '#676FFF',
+                  // logo: 'https://your-logo-url',
+                },
+                // Create embedded wallets for users who don't have a wallet
+                embeddedWallets: {
+                  createOnLogin: 'users-without-wallets',
+                },
+              }}            
+            >  
+              <QueryClientProvider client={queryClient}>
+                <ProgressBar />
+                <AuthKitProvider config={farcasterAuthKitConfig}>
+                  <RainbowKitProvider
+                    avatar={BlockieAvatar}
+                    theme={null}
+                  >
+                    {children}
+                  </RainbowKitProvider>
+                </AuthKitProvider>
+              </QueryClientProvider>
+            </PrivyProvider> 
+          </WagmiProvider>
+        </SessionProvider>
+      </Provider>
     </>
   );
 };

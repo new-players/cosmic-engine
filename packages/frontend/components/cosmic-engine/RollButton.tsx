@@ -5,11 +5,15 @@ import { TransactionReceipt, parseEther } from "viem";
 import { getParsedError, notification } from "~~/utils/scaffold-eth";
 import { hardhat } from "viem/chains";
 import { useAccount, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { getBlockNumber } from 'wagmi/actions'
+import { wagmiConfig } from "~~/services/web3/wagmiConfig";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { toast } from 'react-hot-toast';
 import { Contract, ContractName } from "~~/utils/scaffold-eth/contract";
 import { Prize } from '~~/components/cosmic-engine/JackpotJunction';
+import { useDispatch } from 'react-redux';
+import { setStartBlock } from '~~/store/startBlockSlice';
 import "~~/styles/roll-button.scss";
 
 type RollButtonProps = {
@@ -51,12 +55,12 @@ export const RollButton = ({
   outcome,
   triggerRefreshDisplayVariables
 }: RollButtonProps) => {
-
   const { address: userAddress, chain } = useAccount();
   const writeTxn = useTransactor();
   const { targetNetwork } = useTargetNetwork();
   const writeDisabled = !chain || chain?.id !== targetNetwork.id;
   const { data: result, isPending, writeContractAsync } = useWriteContract();
+  const dispatch = useDispatch();
 
   const handleSpin = async () => {
     if (writeContractAsync && deployedContractData && !isAccepting) {
@@ -77,6 +81,10 @@ export const RollButton = ({
               value: actualCost ? BigInt(actualCost) : BigInt("0"), 
           });
           const res = await writeTxn(makeWriteWithParams);
+          const blockNumber = await getBlockNumber(wagmiConfig);
+          if (blockNumber !== undefined) {
+            dispatch(setStartBlock(blockNumber)); 
+          }
         } catch (error) {
           const parsedError = getParsedError(error);
           if (parsedError.includes("Sender doesn't have enough funds"))
