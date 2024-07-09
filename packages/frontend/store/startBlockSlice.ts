@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface StartBlockState {
-  startBlock: string | null;
+  startBlock: bigint  | null;
 }
 
 const initialState: StartBlockState = {
@@ -12,7 +12,7 @@ const startBlockSlice = createSlice({
   name: 'startBlock',
   initialState,
   reducers: {
-    setStartBlock(state, action: PayloadAction<string>) {
+    setStartBlock(state, action: PayloadAction<bigint | null >) {
       state.startBlock = action.payload;
     },
   },

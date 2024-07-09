@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import { TransactionReceipt, parseEther } from "viem";
 import { getParsedError, notification } from "~~/utils/scaffold-eth";
 import { hardhat } from "viem/chains";
-import { useAccount, useWaitForTransactionReceipt, useWriteContract, useConfig } from "wagmi";
-import { getBlockNumber } from '@wagmi/core'
+import { useAccount, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { getBlockNumber } from 'wagmi/actions'
+import { wagmiConfig } from "~~/services/web3/wagmiConfig";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { toast } from 'react-hot-toast';
@@ -54,7 +55,6 @@ export const RollButton = ({
   outcome,
   triggerRefreshDisplayVariables
 }: RollButtonProps) => {
-  const config = useConfig();
   const { address: userAddress, chain } = useAccount();
   const writeTxn = useTransactor();
   const { targetNetwork } = useTargetNetwork();
@@ -81,9 +81,9 @@ export const RollButton = ({
               value: actualCost ? BigInt(actualCost) : BigInt("0"), 
           });
           const res = await writeTxn(makeWriteWithParams);
-          const blockNumber = await getBlockNumber(config);
+          const blockNumber = await getBlockNumber(wagmiConfig);
           if (blockNumber !== undefined) {
-            dispatch(setStartBlock(blockNumber)); // Convert BigInt to string
+            dispatch(setStartBlock(blockNumber)); 
           }
         } catch (error) {
           const parsedError = getParsedError(error);

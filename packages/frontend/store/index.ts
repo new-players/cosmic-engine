@@ -1,10 +1,8 @@
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
-import startBlockReducer from './startBlockSlice';
+import { configureStore } from '@reduxjs/toolkit';
+import rootReducer from './rootReducer';
 
 const store = configureStore({
-  reducer: {
-    startBlock: startBlockReducer,
-  },
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) => {
     const defaultMiddleware = getDefaultMiddleware({
       serializableCheck: {

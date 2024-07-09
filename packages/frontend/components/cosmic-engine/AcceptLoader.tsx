@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useBlockNumber, useConfig } from 'wagmi';
 import { Prize } from '~~/components/cosmic-engine/JackpotJunction';
 import { useSelector } from 'react-redux';
+import { RootState } from '~~/store/rootReducer';
 
 interface AcceptLoader {
     totalCount: number;
@@ -22,11 +23,11 @@ const AcceptLoader = ({totalCount, closePrizeLayer}: AcceptLoader) => {
       }
     });
     const [updatedBlockNumber, setUpdatedBlockNumber] = useState(blockNumber);
-    const startBlock = useSelector((state) => state.startBlock.startBlock);
-    const targetBlock = startBlock + blocksToAct;
+    const startBlock = useSelector((state: RootState) => state.startBlock.startBlock);
+    const targetBlock = startBlock ? startBlock + blocksToAct : null; 
 
     useEffect(() => {
-      if (blockNumber !== undefined && blocksToAct !== undefined && startBlock !== null) {
+      if (blockNumber !== undefined && targetBlock !==null && blocksToAct !== undefined && startBlock !== null) {
         const blocksLeft = targetBlock - blockNumber;
         setCount(blocksLeft > 0 ? Number(blocksLeft) : 0);
         if (blocksLeft <= 0) {
