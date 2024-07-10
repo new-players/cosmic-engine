@@ -432,7 +432,7 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
                        <p className="text-xs 4xl:text-4xl text-white m-0 p-0">
                             Medium
                         </p>
-                        <div className="flex flex-wrap overflow-hidden w-full justify-center">
+                        <div className="py-1 flex flex-wrap overflow-hidden w-full justify-center">
                             { 
                                     deployedContractData &&
                                     <MediumJackpotBalance address={deployedContractData.address} />

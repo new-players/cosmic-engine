@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Address, formatEther } from "viem";
+import { Address, formatEther, formatGwei } from "viem";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { useWatchBalance } from "~~/hooks/scaffold-eth/useWatchBalance";
 import { useGlobalState } from "~~/services/store/store";
@@ -26,7 +26,7 @@ export const JackpotBalance = ({ address, className = "", usdMode, rawMode }: Ba
   } = useWatchBalance({
     address,
   });
-  const formattedBalance = balance ? Number(formatEther(balance.value))/2 : 0;
+  const formattedBalance = balance ? (Number(formatGwei(balance.value))/2).toLocaleString() : 0;
 
   const [displayUsdMode, setDisplayUsdMode] = useState(price > 0 ? Boolean(usdMode) : false);
 
@@ -36,17 +36,17 @@ export const JackpotBalance = ({ address, className = "", usdMode, rawMode }: Ba
     }
   };
 
-  if(rawMode){
-    return (
-      <>
-        {displayUsdMode ? 
-        `$${(formattedBalance * price).toFixed(2)}`
-        :
-        `${(formattedBalance * price).toFixed(2)} ${targetNetwork.nativeCurrency.symbol}`
-        }
-      </>
-    )
-  }
+  // if(rawMode){
+  //   return (
+  //     <>
+  //       {displayUsdMode ? 
+  //       `$${(formattedBalance * price).toFixed(2)}`
+  //       :
+  //       `${(formattedBalance * price).toFixed(2)} ${targetNetwork.nativeCurrency.symbol}`
+  //       }
+  //     </>
+  //   )
+  // }
 
 
   if (!address || isLoading || balance === null) {
@@ -77,13 +77,13 @@ export const JackpotBalance = ({ address, className = "", usdMode, rawMode }: Ba
         {displayUsdMode ? (
           <div className="flex w-full justify-center">
             <div className="font-bold text-black text-sm xs:text-xl lg:text-3xl 4xl:text-6xl">
-              {`$${(formattedBalance * price).toFixed(2)}`}
+            {`${formattedBalance} GWEI`}
             </div>
           </div>
         ) : (
           <div className="flex w-full justify-center">
-            <div className="font-bold text-black text-sm xs:text-xl lg:text-3xl 4xl:text-6xl">
-              {`${formattedBalance.toFixed(2)} ${targetNetwork.nativeCurrency.symbol}`}
+            <div className="font-bold text-black text-sm xs:text-xl lg:text-3xl 4xl:text-6xl whitespace-nowrap">
+              {`${formattedBalance} GWEI`}
             </div>
           </div>
         )}
