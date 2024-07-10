@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { TransactionReceipt } from "viem";
 import { useAccount, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { useTransactor } from "~~/hooks/scaffold-eth";
@@ -79,6 +79,11 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
 
     const { data: result, isPending, writeContractAsync } = useWriteContract();
     const [currentScreenSize, setCurrentScreenSize] = useState<number | null>(null);
+
+    // const spinningSound = new Audio(');
+    const spinningSound = useRef<HTMLAudioElement | undefined>(
+      typeof Audio !== "undefined" ? new Audio("/sounds/wheel_spinning.wav") : undefined
+    );
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -159,6 +164,31 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
         }
     }, [wheelState]);
 
+    let fadeInterval : NodeJS.Timeout | null = null;
+    // Function to fade out the sound
+    const fadeOutSound = () => {
+        if(typeof spinningSound != "undefined" && spinningSound.current && typeof spinningSound.current.volume === 'number'){
+            const fadeDuration = 1500; // Duration of the fade-out in milliseconds
+            const fadeSteps = 20; // Number of steps for the fade-out
+            const initialVolume = spinningSound?.current?.volume;
+            const fadeStepInterval = fadeDuration / fadeSteps;
+        
+            fadeInterval = setInterval(() => {
+                const currentVolume = spinningSound.current?.volume;
+                if (typeof currentVolume === 'number' && spinningSound?.current?.volume !== undefined) {
+                    const targetVolume = spinningSound?.current?.volume - (initialVolume / fadeSteps);
+                    if (targetVolume > 0) {
+                        spinningSound.current.volume = targetVolume;
+                    } else {
+                        spinningSound.current.pause();
+                        clearInterval((fadeInterval !== null) ? fadeInterval : undefined);
+                        spinningSound.current.volume = initialVolume; // Reset volume to initial after fade-out
+                    }
+                }
+            }, fadeStepInterval) as unknown as NodeJS.Timeout;
+        }
+    };
+
     const rotateSpring = useSpring({
         from: { rotation: 0},
         to: async(next, cancel) => {
@@ -192,6 +222,7 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
         onRest: () => {
             if (isWheelActive && initialLoop){
                 handleWheelState('accelerating')
+                spinningSound?.current?.play();
                 setInitialLoop(false)
             }
             else if ( (isWheelActive && (prizeWon === null || loopCount <= 10))) { //loop for minimum turns
@@ -199,6 +230,7 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
                 handleWheelState('spinning');
             } else if ( isWheelActive && prizeWon) {
                 handleWheelState('decelerating')
+                fadeOutSound();
                 setInitialLoop(true);
                 handleWheelActivity(false)
                 setLoopCount(0);
