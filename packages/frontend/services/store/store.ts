@@ -22,6 +22,8 @@ type GlobalState = {
   setItemImages: (newItemImages: Buffer[]) => void;
   cosmicConsole: boolean;
   setCosmicConsole: (newCosmicConsoleState: boolean) => void;
+  spacePressed: boolean;
+  setSpacePressed: (newSpacePressedState: boolean) => void;
 };
 
 export const useGlobalState = create<GlobalState>(set => ({
@@ -34,5 +36,7 @@ export const useGlobalState = create<GlobalState>(set => ({
   itemImages: [],
   setItemImages: (newItemImages: Buffer[]) => set(() => ({ itemImages: newItemImages})),
   cosmicConsole: false,
-  setCosmicConsole: (newCosmicConsoleState: boolean) => set(() => ({ cosmicConsole: newCosmicConsoleState}))
+  setCosmicConsole: (newCosmicConsoleState: boolean) => set(() => ({ cosmicConsole: newCosmicConsoleState})),
+  spacePressed: false,
+  setSpacePressed: (newSpacePressedState: boolean) => set(() => ({ spacePressed: newSpacePressedState }))
 }));
