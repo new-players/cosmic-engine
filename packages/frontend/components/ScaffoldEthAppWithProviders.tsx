@@ -26,8 +26,7 @@ import type { Session } from "next-auth";
   export enum KeyboardKey {
     tilde= '`',
     escape = 'Escape',
-    enter = 'Enter',
-    space = ' '
+    enter = 'Enter'
   }
 
 const farcasterAuthKitConfig = {
@@ -52,8 +51,6 @@ export const ScaffoldEthAppWithProviders = ({ session, children }: { session: Se
   const setItemImages = useGlobalState(({setItemImages}) => setItemImages);
   const cosmicConsole = useGlobalState(({ cosmicConsole }) => cosmicConsole);
   const setCosmicConsole = useGlobalState(({ setCosmicConsole }) => setCosmicConsole);
-  const spacePressed = useGlobalState(({ spacePressed }) => spacePressed);
-  const setSpacePressed = useGlobalState(({ setSpacePressed }) => setSpacePressed);
 
 
   async function initializeOraImages() {
@@ -96,10 +93,6 @@ export const ScaffoldEthAppWithProviders = ({ session, children }: { session: Se
   useKeyPress(() => {
     setCosmicConsole(!cosmicConsole);
   }, [KeyboardKey.tilde]);
-
-  useKeyPress(() => {
-    setSpacePressed(true);
-  }, [KeyboardKey.space]);
 
 
   return (

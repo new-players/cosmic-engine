@@ -162,16 +162,6 @@ export const RollButton = ({
     setDisplayedTxResult(txResult);
   }, [txResult]);
 
-  const spacePressed = useGlobalState(({ spacePressed }) => spacePressed);
-  const setSpacePressed = useGlobalState(({ setSpacePressed }) => setSpacePressed);
-
-  useEffect(() => {
-    if (spacePressed) {     
-      handleSpin(); 
-      setSpacePressed(false);
-    }
-  }, [setSpacePressed, spacePressed]);
-
   return (
     <div className="py-5 space-y-3 first:pt-0 last:pb-1">
       <div className={`flex gap-3 flex-row justify-between items-center`}>
