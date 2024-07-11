@@ -33,7 +33,7 @@
     "@uniswap/v2-sdk": "^3.0.1",
     "@vercel/postgres": "^0.8.0",
     "@wagmi/core": "^2.11.6",
-    "adm-zip": "^0.5.10",
+    "adm-zip": "^0.5.14",
     "autoprefixer": "10.4.15",
     "bcrypt": "^5.1.1",
     "blo": "^1.0.1",

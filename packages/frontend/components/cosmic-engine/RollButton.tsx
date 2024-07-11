@@ -62,8 +62,38 @@ export const RollButton = ({
   const writeDisabled = !chain || chain?.id !== targetNetwork.id;
   const { data: result, isPending, writeContractAsync } = useWriteContract();
   const dispatch = useDispatch();
+  const [pressed, setPressed] = useState(false);
+
+  const buttonAudio = new Audio('/sounds/button_default.wav');
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.code === 'Space') {
+        setPressed(true);
+        event.preventDefault();
+      }
+    };
+
+    const handleKeyUp = (event: KeyboardEvent) => {
+      if (event.code === 'Space') {
+        setPressed(false);
+        handleSpin();
+      }
+    };
+
+    // Add event listener for keydown
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
 
   const handleSpin = async () => {
+    buttonAudio.play();
     if (writeContractAsync && deployedContractData && !isAccepting) {
       try {
           let actualCost = isReroll ? rerollCost : payableValue;
@@ -154,7 +184,7 @@ export const RollButton = ({
             data-tip={`${writeDisabled && "Wallet not connected or in the wrong network"}`}
           >
             <button 
-              className={`spin w-[150px] h-[64px] text-xl text-center`}
+              className={`spin ${pressed ? 'pressed' : ''} w-[150px] h-[64px] text-xl text-center`}
               disabled={writeDisabled || isPending || isWheelActive || isAccepting} onClick={handleSpin}
             >
               {isPending || loading || isWheelActive ? <span className="loading loading-spinner loading-xs"></span> : isReroll ? 'Respin' : buttonLabel}
