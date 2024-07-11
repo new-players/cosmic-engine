@@ -44,9 +44,7 @@ export const PrizeRing = ({
             outcome_medium.play();
         } else if (prizeWon?.prizeType === '4') {
             outcome_jackpot.play();
-        } else {
-            outcome_bust.play();
-        }    
+        }
     }, []);
 
     

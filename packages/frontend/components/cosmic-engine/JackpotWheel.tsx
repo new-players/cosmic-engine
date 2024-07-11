@@ -219,25 +219,25 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
             timeoutSound?.current?.play();
         }
         fadeOutSound();
-        await new Promise((resolve) => {
-            setTimeout(() => {
-              handleWheelState('notMoving');
-              resolve();
-            }, 1500);
-        });
         if(prizeWon && prizeWon.prizeType !== '0'){
-            await new Promise ((resolve)=>{
-                setTimeout(() => {
-                    setIsPrizeVisible(true);
-                    resolve();
-                }, 150)
-            });
+            setIsPrizeVisible(true);
         } else if (prizeWon && prizeWon.prizeType === '0') {
             if(typeof outcome_bust != "undefined" && outcome_bust.current){
-                outcome_bust?.current?.play();
+                await new Promise<void>((resolve)=>{
+                    setTimeout(() => {
+                        outcome_bust?.current?.play();
+                        resolve();
+                    }, 300)
+                });
             }
         }
         handleLoading(false);
+        await new Promise<void>((resolve) => {
+            setTimeout(() => {
+                handleWheelState('notMoving');
+                resolve();
+            }, 1500);
+        });
     }
 
     const rotateSpring = useSpring({
@@ -379,7 +379,7 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
         setInitialLoop(true);
         handleReroll(false);
         setIsLightActive(false);
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise<void>(resolve => setTimeout(resolve, 2000));
         handleIsAccepting(false);
     }
     /*
@@ -565,12 +565,14 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
             <div className="absolute z-[10] left-[50%] bottom-[40px] lg:bottom-[65px] 4xl:bottom-[80px] transform -translate-x-1/2 translate-y-0 h-[45px]">
                 <svg 
                     width={
-                        (getScreenBreakpoint() === 'def' || getScreenBreakpoint() === 'xs' ) ? "40" 
+                        getScreenBreakpoint() === 'none' ? '0' 
+                        :(getScreenBreakpoint() === 'def' || getScreenBreakpoint() === 'xs' ) ? "40" 
                         : (getScreenBreakpoint() === 'lg') ? '55'
                         // : (getScreenBreakpoint() === '3xl') ? '65'
                         : '120'
                     } 
-                    height={(getScreenBreakpoint() === 'def' || getScreenBreakpoint() === 'xs' ) ? "40" 
+                    height={(getScreenBreakpoint() === 'none' ? '0'
+                        :getScreenBreakpoint() === 'def' || getScreenBreakpoint() === 'xs' ) ? "40" 
                         : (getScreenBreakpoint() === 'lg') ? '55'
                         // : (getScreenBreakpoint() === '3xl') ? '65'
                         : '120'

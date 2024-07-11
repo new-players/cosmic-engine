@@ -123,11 +123,6 @@ export const RollButton = ({
           if (blockNumber !== undefined) {
             dispatch(setStartBlock(blockNumber)); 
           }
-          if(res?.customErrorId) {
-            errorAudio.play();
-            toast.error(res?.errorMessage);
-            resetWheelState();
-          }
         } catch (error) {
           errorAudio.play();
           const parsedError = getParsedError(error);

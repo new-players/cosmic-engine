@@ -40,8 +40,9 @@ export const useTransactor = (_walletClient?: WalletClient): TransactionFunc => 
 
   const result: TransactionFunc = async (tx, options) => {
     if (!walletClient) {
-      console.error("⚡️ ~ file: useTransactor.tsx ~ error Cannot access account");
-      return {errorMessage: "Cannot access account", customErrorId: 1}; //custom error since this does not accept a throw new Error
+      notification.error("Cannot access account");
+      console.error("⚡️ ~ file: useTransactor.tsx ~ error");
+      return;
     }
 
     let notificationId = null;
