@@ -80,9 +80,20 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
     const { data: result, isPending, writeContractAsync } = useWriteContract();
     const [currentScreenSize, setCurrentScreenSize] = useState<number | null>(null);
 
-    // const spinningSound = new Audio(');
+    // Sounds
+    const outcome_bust = useRef<HTMLAudioElement | undefined>(
+        typeof Audio !== "undefined" ? new Audio('/sounds/outcome_bust.wav') 
+        : undefined
+    )
+
     const spinningSound = useRef<HTMLAudioElement | undefined>(
-      typeof Audio !== "undefined" ? new Audio("/sounds/wheel_spinning.wav") : undefined
+      typeof Audio !== "undefined" ? new Audio("/sounds/wheel_spinning.wav") 
+      : undefined
+    );
+
+    const timeoutSound = useRef<HTMLAudioElement | undefined>(
+        typeof Audio !== "undefined" ? new Audio("/sounds/outcome_timeout.wav") 
+        : undefined
     );
 
     useEffect(() => {
@@ -165,6 +176,14 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
     }, [wheelState]);
 
     let fadeInterval : NodeJS.Timeout | null = null;
+    const initiateWheelSound = () => {
+        if(typeof spinningSound != "undefined" && spinningSound.current && typeof spinningSound.current.volume === 'number'  && typeof spinningSound.current.currentTime === 'number'){
+            spinningSound.current.volume = 1;
+            spinningSound.current.currentTime = 0;
+            spinningSound.current.loop = true;
+            spinningSound?.current?.play();
+        }
+    }
     // Function to fade out the sound
     const fadeOutSound = () => {
         if(typeof spinningSound != "undefined" && spinningSound.current && typeof spinningSound.current.volume === 'number'){
@@ -175,12 +194,14 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
         
             fadeInterval = setInterval(() => {
                 const currentVolume = spinningSound.current?.volume;
-                if (typeof currentVolume === 'number' && spinningSound?.current?.volume !== undefined) {
+                if (typeof currentVolume === 'number' && spinningSound?.current?.volume !== undefined && typeof spinningSound.current.currentTime === 'number') {
                     const targetVolume = spinningSound?.current?.volume - (initialVolume / fadeSteps);
                     if (targetVolume > 0) {
                         spinningSound.current.volume = targetVolume;
                     } else {
                         spinningSound.current.pause();
+                        spinningSound.current.volume = 1; 
+                        spinningSound.current.currentTime = 0;
                         clearInterval((fadeInterval !== null) ? fadeInterval : undefined);
                         spinningSound.current.volume = initialVolume; // Reset volume to initial after fade-out
                     }
@@ -189,8 +210,38 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
         }
     };
 
+    const finishingRoll = async () => {
+        handleWheelState('decelerating');
+        setInitialLoop(true);
+        setLoopCount(0);
+        handleWheelActivity(false);
+        if(!prizeWon && typeof timeoutSound != "undefined" && timeoutSound.current){
+            timeoutSound?.current?.play();
+        }
+        fadeOutSound();
+        await new Promise((resolve) => {
+            setTimeout(() => {
+              handleWheelState('notMoving');
+              resolve();
+            }, 1500);
+        });
+        if(prizeWon && prizeWon.prizeType !== '0'){
+            await new Promise ((resolve)=>{
+                setTimeout(() => {
+                    setIsPrizeVisible(true);
+                    resolve();
+                }, 150)
+            });
+        } else if (prizeWon && prizeWon.prizeType === '0') {
+            if(typeof outcome_bust != "undefined" && outcome_bust.current){
+                outcome_bust?.current?.play();
+            }
+        }
+        handleLoading(false);
+    }
+
     const rotateSpring = useSpring({
-        from: { rotation: 0},
+        from: { rotation:  isNaN(prizeAngle) ? 70 : prizeAngle },
         to: async(next, cancel) => {
             if (wheelState === 'notMoving') {
                 await next({ rotation: isNaN(prizeAngle) ? 70 : prizeAngle });
@@ -208,12 +259,6 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
             } 
             else if (wheelState === 'decelerating') {
                 await next({ rotation: (360 * 9)+ prizeAngle, config: { duration: 1500, easing: easings.easeOutSine } });
-                handleLoading(false)
-                if(prizeWon && prizeWon.prizeType !== '0'){
-                    const timer = setTimeout(() => {
-                        setIsPrizeVisible(true);
-                    }, 50);
-                }
               }  else {
                 console.log('Reached unexpected state')
               }
@@ -222,20 +267,16 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
         onRest: () => {
             if (isWheelActive && initialLoop){
                 handleWheelState('accelerating')
-                spinningSound?.current?.play();
+                initiateWheelSound();
                 setInitialLoop(false)
             }
             else if ( (isWheelActive && (prizeWon === null || loopCount <= 10))) { //loop for minimum turns
                 setLoopCount(prev => prev+1);
                 handleWheelState('spinning');
-            } else if ( isWheelActive && prizeWon) {
-                handleWheelState('decelerating')
-                fadeOutSound();
-                setInitialLoop(true);
-                handleWheelActivity(false)
-                setLoopCount(0);
-            } else if ( !isWheelActive && wheelState === 'spinning' ) {
-                handleWheelState('decelerating')
+            } else if ( isWheelActive && prizeWon && wheelState !== 'notMoving') {
+                finishingRoll();
+            } else if ( !isWheelActive && wheelState !== 'notMoving' && (wheelState === 'spinning' || wheelState === 'accelerating') ) {
+                finishingRoll();
             }
         },
     })
