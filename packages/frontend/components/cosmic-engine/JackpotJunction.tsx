@@ -293,8 +293,8 @@ export const JackpotJunction = () => {
                         {
                             cosmicConsole && 
                             <>
-                                {wheelState}
-
+                                {wheelState} <br/>
+                                Wheel active: {isWheelActive.toString()}
                                 <div className="bg-base-300 rounded-3xl px-6 lg:px-8 py-4 shadow-lg shadow-base-300">
                                     {
                                         deployedContractData &&

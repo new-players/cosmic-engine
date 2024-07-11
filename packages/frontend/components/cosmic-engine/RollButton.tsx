@@ -14,7 +14,6 @@ import { Contract, ContractName } from "~~/utils/scaffold-eth/contract";
 import { Prize } from '~~/components/cosmic-engine/JackpotJunction';
 import { useDispatch } from 'react-redux';
 import { setStartBlock } from '~~/store/startBlockSlice';
-import { useGlobalState } from "~~/services/store/store";
 import "~~/styles/roll-button.scss";
 
 type RollButtonProps = {
@@ -56,15 +55,16 @@ export const RollButton = ({
   outcome,
   triggerRefreshDisplayVariables
 }: RollButtonProps) => {
-  const { address: userAddress, chain } = useAccount();
+  const { address: userAddress, chain, isConnected } = useAccount();
   const writeTxn = useTransactor();
   const { targetNetwork } = useTargetNetwork();
-  const writeDisabled = !chain || chain?.id !== targetNetwork.id;
+  const writeDisabled = !chain || chain?.id !== targetNetwork.id ||  !isConnected;
   const { data: result, isPending, writeContractAsync } = useWriteContract();
   const dispatch = useDispatch();
   const [pressed, setPressed] = useState(false);
 
   const buttonAudio = new Audio('/sounds/button_default.wav');
+  const errorAudio = new Audio('/sounds/error.wav');
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -92,9 +92,16 @@ export const RollButton = ({
     };
   }, []);
 
+  const resetWheelState = () => {
+    handleLoading(false);
+    handleIsTransactionFinished(true);
+    handleWheelActivity(false);
+    handlePrizeWon(null);
+  }
+
   const handleSpin = async () => {
     buttonAudio.play();
-    if (writeContractAsync && deployedContractData && !isAccepting) {
+    if (writeContractAsync && deployedContractData && !isAccepting && isConnected) {
       try {
           let actualCost = isReroll ? rerollCost : payableValue;
           handleIsTransactionFinished(false);
@@ -117,6 +124,7 @@ export const RollButton = ({
             dispatch(setStartBlock(blockNumber)); 
           }
         } catch (error) {
+          errorAudio.play();
           const parsedError = getParsedError(error);
           if (parsedError.includes("Sender doesn't have enough funds"))
           {
@@ -125,26 +133,22 @@ export const RollButton = ({
           else {
             toast.error(parsedError);
           }
-          handleLoading(false);
-          handleIsTransactionFinished(true);
-          handleWheelActivity(false);
-          handlePrizeWon(null);
+          resetWheelState();
         }
         // perform another transaction on localhost to make block tick
         try {
           if (chain?.id === hardhat.id) {
-            await writeTxn({
+            const res = await writeTxn({
               chain: hardhat,
               account: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
               to: userAddress,
               value: parseEther("0"),
-            });        
+            });
           }
         } catch (error) {
+          errorAudio.play();
           toast.error("Problem occured while rolling, please try again.");
-          handleLoading(false)
-          handleIsTransactionFinished(true);
-          handleWheelActivity(false);
+          resetWheelState();
         }
 
         triggerRefreshDisplayVariables();
@@ -161,16 +165,6 @@ export const RollButton = ({
   useEffect(() => {
     setDisplayedTxResult(txResult);
   }, [txResult]);
-
-  const spacePressed = useGlobalState(({ spacePressed }) => spacePressed);
-  const setSpacePressed = useGlobalState(({ setSpacePressed }) => setSpacePressed);
-
-  useEffect(() => {
-    if (spacePressed) {     
-      handleSpin(); 
-      setSpacePressed(false);
-    }
-  }, [setSpacePressed, spacePressed]);
 
   return (
     <div className="py-5 space-y-3 first:pt-0 last:pb-1">

@@ -26,8 +26,28 @@ export const PrizeRing = ({
     const [isMounted, setIsMounted] = useState(true);
     const [isShaking, setIsShaking] = useState(false);
     const [fastShaking, setFastShaking] = useState(false);
+    // Animations
     const animationData = require('~~/assets/falling-confetti.json');
+    // Sounds
+    const outcome_bust = new Audio('/sounds/outcome_bust.wav');
+    const outcome_item = new Audio('/sounds/outcome_item.wav');
+    const outcome_small = new Audio('/sounds/outcome_small.wav');
+    const outcome_medium = new Audio('/sounds/outcome_medium.wav');
+    const outcome_jackpot = new Audio('/sounds/outcome_jackpot.wav');
 
+    useEffect(() => {
+        if(prizeWon?.prizeType === '1'){
+            outcome_item.play();
+        } else if (prizeWon?.prizeType === '2') {
+            outcome_small.play();
+        } else if (prizeWon?.prizeType === '3') {
+            outcome_medium.play();
+        } else if (prizeWon?.prizeType === '4') {
+            outcome_jackpot.play();
+        }
+    }, []);
+
+    
     const defaultOptions = {
         loop: true,
         autoplay: true,
