@@ -167,7 +167,7 @@ export const RollButton = ({
   }, [txResult]);
 
   return (
-    <div className="py-5 space-y-3 first:pt-0 last:pb-1">
+    <div className="py-5 4xl:my-20 space-y-3 first:pt-0 last:pb-1">
       <div className={`flex gap-3 flex-row justify-between items-center`}>
         <div className="flex justify-between gap-2">
           <div
@@ -178,7 +178,7 @@ export const RollButton = ({
             data-tip={`${writeDisabled && "Wallet not connected or in the wrong network"}`}
           >
             <button 
-              className={`spin ${pressed ? 'pressed' : ''} w-[150px] h-[64px] text-xl text-center`}
+              className={`spin ${pressed ? 'pressed' : ''} w-[150px] 4xl:w-[400px] h-[64px] 4xl:h-[170px] text-xl 4xl:text-5xl text-center`}
               disabled={writeDisabled || isPending || isWheelActive || isAccepting} onClick={handleSpin}
             >
               {isPending || loading || isWheelActive ? <span className="loading loading-spinner loading-xs"></span> : isReroll ? 'Respin' : buttonLabel}

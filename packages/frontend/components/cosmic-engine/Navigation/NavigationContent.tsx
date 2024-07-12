@@ -8,7 +8,7 @@ import Image from 'next/image';
 
 export default function NavigationContent ({tab}: {tab: string | null}) {
     return(
-        <div className="flex flex-col grow ">
+        <div className="relative flex flex-col grow my-[1rem] 4xl:my-[8rem]">
             { tab === 'wagon' ?
                 <Suspense>
                     <Wagon />
