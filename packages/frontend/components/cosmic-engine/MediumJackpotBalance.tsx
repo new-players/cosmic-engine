@@ -69,10 +69,10 @@ export const MediumJackpotBalance = ({ address, className = "", usdMode, rawMode
 
   return (
     <button
-      className={`btn btn-sm btn-ghost flex flex-col font-ibmPlexMono font-normal items-center hover:bg-transparent ${className}`}
+      className={`w-full px-0 btn btn-sm btn-ghost flex flex-col font-ibmPlexMono font-normal hover:bg-transparent ${className}`}
       onClick={toggleBalanceMode}
     >
-      <div className="w-full flex items-center justify-center text-white">
+      <div className="w-full flex text-white">
         {displayUsdMode ? (
           <>
             <span className="text-[10px] xs:text-[.9rem] lg:text-base 4xl:text-5xl px-2 text-white">$</span>
@@ -81,10 +81,9 @@ export const MediumJackpotBalance = ({ address, className = "", usdMode, rawMode
             </span>
           </>
         ) : (
-          <div className="flex flex-wrap overflow-hidden w-full justify-center">
-            <div className="text-[10px] xs:text-[.9rem] lg:text-base 4xl:text-5xl px-2 text-white whitespace-nowrap">
-              {`${formattedBalance}`}<br/>
-              GWEI
+          <div className="flex flex-wrap overflow-hidden w-full justify-end">
+            <div className="text-[10px] xs:text-[.9rem] lg:text-base 4xl:text-5xl text-white whitespace-nowrap">
+              {`${formattedBalance} GWEI`}
             </div>
           </div>
         )}

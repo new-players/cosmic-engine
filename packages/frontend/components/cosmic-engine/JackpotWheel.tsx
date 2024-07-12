@@ -458,7 +458,7 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
             <div className="absolute flex justify-center
              w-[250px] h-[250px] xs:w-[400px] xs:h-[400px] lg:w-[530px] lg:h-[530px] 4xl:w-[1320px] 4xl:h-[1320px] my-4 ">
                 <div className="absolute top-[-20%] h-[40%] w-[150%] flex justify-center items-center  ">
-                    <div className=" relative bg-[url('/jackpotWheel/banner-small.png')] bg-cover bg-center flex flex-col font-ibmPlexMono 
+                    <div className="px-2 text-start relative bg-[url('/jackpotWheel/banner-small.png')] bg-cover bg-center flex flex-col font-ibmPlexMono 
                         top-[-75px] xs:top-[-90px] lg:top-[-90px] 4xl:top-[-110px] 
                         left-[-10px] xs:left-[-10px] lg:left-[-20px] 4xl:left-[-55px]
                         w-[95px] xs:w-[118px] lg:w-[159px] 4xl:w-[396px] 
@@ -468,8 +468,8 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
                        <p className="text-xs 4xl:text-4xl text-white m-0 p-0">
                             Small
                         </p>
-                        <div className="flex flex-wrap overflow-hidden w-full justify-center">
-                            <div className="text-[10px] xs:text-lg 4xl:text-5xl px-2 text-white">
+                        <div className="flex flex-wrap overflow-hidden w-full">
+                            <div className="text-[10px] xs:text-lg 4xl:text-5xl text-white">
                                 {
                                     prizeSmall != undefined  &&
                                 `${parseInt(formatGwei(prizeSmall)) * 1.5} GWEI`
@@ -495,7 +495,7 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
                             </div>
                         </div>
                     </div>
-                    <div className="relative bg-[url('/jackpotWheel/banner-medium.png')] bg-cover bg-center flex flex-col font-ibmPlexMono 
+                    <div className="text-end px-2 relative bg-[url('/jackpotWheel/banner-medium.png')] bg-cover bg-center flex flex-col font-ibmPlexMono 
                         top-[-75px] xs:top-[-90px] lg:top-[-90px] 4xl:top-[-108px] 
                         left-[10px] xs:left-[10px] lg:left-[20px] 4xl:left-[55px]
                         w-[95px] xs:w-[118px] lg:w-[159px] 4xl:w-[396px]
@@ -505,10 +505,10 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
                        <p className="text-xs 4xl:text-4xl text-white m-0 p-0">
                             Medium
                         </p>
-                        <div className="py-1 flex flex-wrap overflow-hidden w-full justify-center">
+                        <div className="py-1 flex flex-wrap justify-end overflow-hidden w-full">
                             { 
                                     deployedContractData &&
-                                    <MediumJackpotBalance address={deployedContractData.address} />
+                                    <MediumJackpotBalance address={deployedContractData.address}/>
                             }
                         </div>
                     </div>
