@@ -140,18 +140,18 @@ export default function WagonScreen(){
                 <div className="bg-gray-300 w-full flex flex-col grow h-full gap-y-4 px-4 rounded-b-2xl">
                     {/* Wagon Section */}
                     <div className="text-center">
-                            <p className="font-bold" style={{ lineHeight: '0.25rem' }}>Your Wagon</p>
-                            <p style={{ fontSize: '0.75rem', lineHeight: '0.5rem'}}>Equip a full set to get better spin odds!</p>
+                        <p className="font-bold" style={{ lineHeight: '0.25rem' }}>Your Wagon</p>
+                        <p style={{ fontSize: '0.75rem', lineHeight: '0.5rem'}}>Equip a full set to get better spin odds!</p>
 
-                        </div>
+                    </div>
 
                     <div className="flex flex-col h-full max-h-[20%] gap-x-4">
                         <div className="flex justify-between py-2">
                         </div>
                         {/* 2.60 */}
-                        <div className="flex justify-between items-center gap-x-6 w-full h-full">
-                            <div className="flex">
-                                <div className="w-[400px] h-[240px] -top-2 relative">
+                        <div className=" flex justify-between items-center gap-x-6 w-full h-full">
+                            <div className="flex justify-center w-full">
+                                <div className="w-[260px] xs:w-[400px] md:w-[400px] h-[156px] xs:h-[240px] md:h-[240px] -top-2 relative">
                                     {
                                         <EquippedWagon 
                                             equippedBeasts={equippedBeasts}
@@ -162,9 +162,6 @@ export default function WagonScreen(){
                                     }
                                     
                                 </div>
-                            </div>
-                            <div className="flex flex-col grow gap-y-1 sm:gap-y-3 max-w-[200px] sm:max-w-[300px] md:max-w-[400px] overflow-x-hidden xl:pl-[4rem]">
-                               
                             </div>
                             {/* <div className="hidden xl:flex min-w-[380px] justify-center items-center gap-x-4">
                                 <WagonCard cardData={sampleData}/>
