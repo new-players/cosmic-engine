@@ -30,7 +30,7 @@ export default function Inventory ({
 
     return (
         
-        <div className="grid grid-cols-4 gap-4" >
+        <div className="grid grid-cols-2 xs:grid-cols-3 md:grid-cols-4 gap-4 place-items-center" >
             {data.map((item, index) => (
                 <div 
                     className={`relative border w-[100px] h-[100px] bg-[#B4B4B4] ${item === selectedItem ? 'selected' : ''}`} 
