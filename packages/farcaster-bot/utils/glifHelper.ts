@@ -40,7 +40,6 @@ export class GlifHelper {
   ): Promise<string> {
     let result: string | null;
 
-    console.log('sending request to glif')
     if (outputType === 'WOJAK') {
       const payload = {
         "id": "clxtc53mi0000ghv10g6irjqj",
