@@ -2,8 +2,6 @@ import axios from 'axios';
 
 export type OutputType = 'WOJAK' | 'IKEA';
 
-// curl -X POST -H "Authorization: Bearer f2360fa214ee1c3685de50da95ae8c72" -d '{"id": "clxtc53mi0000ghv10g6irjqj", "inputs": ["PC is the best for gaming"]}' https://simple-api.glif.app
-
 export class GlifHelper {
   private glifEndpoint: string;
 
