@@ -16,16 +16,17 @@ export async function POST(req: Request) {
     // gradio client
     const gradioClient = await Client.connect(process.env.TTS_SERVER_ENDPOINT ?? '');
     const llmResult: any = await gradioClient.predict("/chat", [
-            hookData.data.text.replace("@cosmobot", ""),
+            hookData.data.text.replace("cosmobot", ""),
             ""
       ]);
     console.log(llmResult.data[0]);
 
     const reply = await neynarClient.publishCast(
-      process.env.SIGNER_UUID,
+      process.env.SIGNER_UUID ?? '',
       llmResult.data[0],
       {
         replyTo: hookData.data.hash,
+        embeds: []
       }
     );
 
@@ -34,4 +35,9 @@ export async function POST(req: Request) {
     console.log(e.message, { status: 500 })
     return new Response(e.message, { status: 500 });
   }
+}
+
+export async function GET() {
+  console.log("get received")
+  return new Response("hi", {status: 200})
 }
