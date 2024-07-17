@@ -21,7 +21,7 @@ type RollButtonProps = {
   deployedContractData?: Contract<ContractName>;
   buttonLabel: string;
   isWheelActive: boolean;
-  isAccepting: boolean;
+  isAcceptingPrize: boolean;
   handleIsSpinning: (val: boolean) => void;
   handleLoading: (val: boolean)=> void;
   handlePrizeWon: (prize: Prize | null) => void;
@@ -38,7 +38,7 @@ type RollButtonProps = {
 
 export const RollButton = ({
   isReroll,
-  isAccepting,
+  isAcceptingPrize,
   deployedContractData,
   buttonLabel,
   handleIsTransactionFinished,
@@ -101,7 +101,7 @@ export const RollButton = ({
 
   const handleSpin = async () => {
     buttonAudio.play();
-    if (writeContractAsync && deployedContractData && !isAccepting && isConnected) {
+    if (writeContractAsync && deployedContractData && !isAcceptingPrize) {
       try {
           let actualCost = isReroll ? rerollCost : payableValue;
           handleIsTransactionFinished(false);
@@ -179,7 +179,7 @@ export const RollButton = ({
           >
             <button 
               className={`spin ${pressed ? 'pressed' : ''} w-[150px] 4xl:w-[400px] h-[64px] 4xl:h-[170px] text-xl 4xl:text-5xl text-center`}
-              disabled={writeDisabled || isPending || isWheelActive || isAccepting} onClick={handleSpin}
+              disabled={writeDisabled || isPending || isWheelActive || isAcceptingPrize} onClick={handleSpin}
             >
               {isPending || loading || isWheelActive ? <span className="loading loading-spinner loading-xs"></span> : isReroll ? 'Respin' : buttonLabel}
             </button>

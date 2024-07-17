@@ -83,7 +83,7 @@ export const JackpotBalance = ({ address, className = "", usdMode, rawMode }: Ba
                 </div>
               </div>
             ) : (
-              <div className="flex w-full h-full justify-center overflow-hidden border">
+              <div className="flex w-full h-full justify-center overflow-hidden">
                 <div className="font-bold text-black text-sm xs:text-xl lg:text-3xl 4xl:text-6xl truncate">
                   {`${formattedBalance} GWEI`}
                 </div>
@@ -91,7 +91,7 @@ export const JackpotBalance = ({ address, className = "", usdMode, rawMode }: Ba
             )}
           </div>
         </button>
-        <div class="absolute left-1/2 bottom-full mb-2 transform -translate-x-1/2 opacity-0 px-3 py-1 text-sm text-white bg-gray-700 rounded-xl group-hover:opacity-100 transition-opacity duration-300">
+        <div className="absolute left-1/2 bottom-full mb-2 transform -translate-x-1/2 opacity-0 px-3 py-1 text-sm text-white bg-gray-700 rounded-xl group-hover:opacity-100 transition-opacity duration-300">
           {`${formattedBalance} GWEI`}
           {/* arrow pointing downward */}
           <div className="absolute bottom-[-5px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-t-[5px] border-t-gray-700 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent"></div>
