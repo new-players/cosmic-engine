@@ -54,7 +54,7 @@ export const JackpotJunction = () => {
     const [ isTransactionFinished, setIsTransactionFinished ] = useState(true);
     const [ prizeWon, setPrizeWon ] = useState<Prize | null>(null);
     const [ isReroll, setIsReroll ] = useState(false);
-    const [ isAccepting, setIsAccepting ] = useState(false);
+    const [ isAcceptingPrize, setIsAcceptingPrize ] = useState(false);
 
     const [refreshDisplayVariables, triggerRefreshDisplayVariables] = useReducer(value => !value, false);
     const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(JJ_CONTRACT_NAME);
@@ -122,8 +122,8 @@ export const JackpotJunction = () => {
 
     const { showAnimation } = useAnimationConfig(outcome);
 
-    const handleIsAccepting = (val:boolean) => {
-        setIsAccepting(val)
+    const handleIsAcceptingPrize = (val:boolean) => {
+        setIsAcceptingPrize(val)
     }
 
     const handleIsTransactionFinished = (val:boolean) => {
@@ -230,7 +230,7 @@ export const JackpotJunction = () => {
                         isReroll={isReroll}
                         prizeSmall={ROLL_COST}
                         handleWheelActivity={handleWheelActivity}
-                        handleIsAccepting={handleIsAccepting}
+                        handleIsAcceptingPrize={handleIsAcceptingPrize}
                         handleWheelState={handleWheelState}
                         handlePrizeWon={handlePrizeWon}
                         handleReroll={handleReroll}
@@ -251,7 +251,7 @@ export const JackpotJunction = () => {
                                         deployedContractData={deployedContractData}
                                         handlePrizeWon={handlePrizeWon}  
                                         handleLoading={handleLoading}
-                                        isAccepting={isAccepting}
+                                        isAcceptingPrize={isAcceptingPrize}
                                         buttonLabel="SPIN"
                                         handleIsTransactionFinished={handleIsTransactionFinished}
                                         triggerRefreshDisplayVariables={triggerRefreshDisplayVariables}
@@ -293,7 +293,7 @@ export const JackpotJunction = () => {
                         {
                             cosmicConsole && 
                             <>
-                                {wheelState} <br/>
+                                Wheel State: {wheelState} <br/>
                                 Wheel active: {isWheelActive.toString()}
                                 <div className="bg-base-300 rounded-3xl px-6 lg:px-8 py-4 shadow-lg shadow-base-300">
                                     {

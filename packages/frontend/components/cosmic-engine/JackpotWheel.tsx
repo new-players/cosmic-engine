@@ -30,7 +30,7 @@ interface JackpotWheelProps {
     handleWheelState: (val: string) => void;
     handlePrizeWon: (prize:Prize | null) => void;
     handleIsTransactionFinished: (val: boolean) => void;
-    handleIsAccepting: (val:boolean) => void ;
+    handleIsAcceptingPrize: (val:boolean) => void ;
     deployedContractData: Contract<ContractName> | null;
     isWheelActive: boolean;
     handleWheelActivity: (val: boolean) => void;
@@ -45,7 +45,7 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
         prizeSmall,
         isReroll,
         handleWheelActivity,
-        handleIsAccepting,
+        handleIsAcceptingPrize,
         handleWheelState,
         handlePrizeWon,
         handleReroll,
@@ -64,10 +64,12 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
         { color: '#242424', type: 3 },
         { color: '#7a4f9b', type: 4 },
     ];
+    const wheelRef = useSpringRef();
     const slices = prizes.length;
     const angle = 360 / slices;
     const [ initialLoop, setInitialLoop ] = useState(true);
-    const [ loopCount, setLoopCount ] = useState(0);
+    const [ isWheelResting, setIsWheelResting ] = useState(true);
+    const [ finishedAccelerating, setFinishedAccelerating ] = useState(false);
     const [ prizeAngle, setPrizeAngle ] = useState(0);
     const [ isPrizeVisible, setIsPrizeVisible ] = useState(false);
     const [ isLightActive, setIsLightActive ] = useState(false);
@@ -82,7 +84,7 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
 
     // Sounds
     const outcome_bust = useRef<HTMLAudioElement | undefined>(
-        typeof Audio !== "undefined" ? new Audio('/sounds/outcome_bust.wav') 
+        typeof Audio !== "undefined" ? new Audio('/sounds/error.wav')
         : undefined
     )
 
@@ -128,14 +130,12 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
     }
 
     const handleAccept = () => {
-        handleIsAccepting(true);
+        handleIsAcceptingPrize(true);
     }
 
     useEffect(() => {
         setPrizeAngle(getAngle())
-    }, [prizeWon]);
-
-    
+    }, [prizeWon]);    
 
     const handleWrite = async () => {
         if (writeContractAsync && deployedContractData) {
@@ -213,23 +213,11 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
     const finishingRoll = async () => {
         handleWheelState('decelerating');
         setInitialLoop(true);
-        setLoopCount(0);
+        setFinishedAccelerating(false);
         handleWheelActivity(false);
-        if(!prizeWon && typeof timeoutSound != "undefined" && timeoutSound.current){
-            timeoutSound?.current?.play();
-        }
         fadeOutSound();
         if(prizeWon && prizeWon.prizeType !== '0'){
             setIsPrizeVisible(true);
-        } else if (prizeWon && prizeWon.prizeType === '0') {
-            if(typeof outcome_bust != "undefined" && outcome_bust.current){
-                await new Promise<void>((resolve)=>{
-                    setTimeout(() => {
-                        outcome_bust?.current?.play();
-                        resolve();
-                    }, 300)
-                });
-            }
         }
         handleLoading(false);
         await new Promise<void>((resolve) => {
@@ -239,6 +227,35 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
             }, 1500);
         });
     }
+
+    const accelerateWheel = async () => {
+        handleWheelState('accelerating')
+        initiateWheelSound();
+        setInitialLoop(false)
+        await new Promise<void>((resolve) => {
+            setTimeout(() => {
+                setFinishedAccelerating(true)
+                handleWheelState('spinning');
+                resolve();
+            }, 1500);
+        });
+    }
+
+    useEffect(() => {
+        if(isWheelResting){
+            if (isWheelActive && wheelState === 'notMoving' && initialLoop) {
+                setIsWheelResting(false);
+                accelerateWheel();
+            }
+            else if (isWheelActive && prizeWon && wheelState !== 'notMoving') {
+                setIsWheelResting(false);
+                finishingRoll();
+            } else if (!isWheelActive && wheelState !== 'notMoving' && (wheelState === 'spinning' || wheelState === 'accelerating')) {
+                setIsWheelResting(false);
+                finishingRoll();
+            }
+        }
+    }, [isWheelActive, wheelState, prizeWon, finishedAccelerating]);
 
     const rotateSpring = useSpring({
         from: { rotation:  isNaN(prizeAngle) ? 70 : prizeAngle },
@@ -265,21 +282,22 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
         },
         reset: wheelState === 'notMoving',
         onRest: () => {
-            if (isWheelActive && initialLoop){
-                handleWheelState('accelerating')
-                initiateWheelSound();
-                setInitialLoop(false)
-            }
-            else if ( (isWheelActive && (prizeWon === null || loopCount <= 10))) { //loop for minimum turns
-                setLoopCount(prev => prev+1);
-                handleWheelState('spinning');
-            } else if ( isWheelActive && prizeWon && wheelState !== 'notMoving') {
-                finishingRoll();
-            } else if ( !isWheelActive && wheelState !== 'notMoving' && (wheelState === 'spinning' || wheelState === 'accelerating') ) {
-                finishingRoll();
+            setIsWheelResting(true)
+            // Sounds on play
+            if (wheelState === 'decelerating') {
+                if(!prizeWon && typeof timeoutSound != "undefined" && timeoutSound.current){
+                    timeoutSound?.current?.play();
+                }
+                if (prizeWon && prizeWon.prizeType === '0') {
+                    if(typeof outcome_bust != "undefined" && outcome_bust.current){
+                        outcome_bust?.current?.play();
+                    }
+                }
             }
         },
     })
+
+    //isWheelActive, initialLoop, initiateWheel
 
     const getAngle = () => {
         if (prizeWon) {
@@ -287,7 +305,7 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
             const sliceMiddleAngle = (sliceIndex * angle) - (angle / 2); // Calculate the middle of the slice
             return 360 - sliceIndex* angle + 70;
         }
-        return 0; 
+        return prizeAngle;
     }
 
 
@@ -380,7 +398,7 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
         handleReroll(false);
         setIsLightActive(false);
         await new Promise<void>(resolve => setTimeout(resolve, 2000));
-        handleIsAccepting(false);
+        handleIsAcceptingPrize(false);
     }
     /*
         Wheel Active: False (Undergoing animation)
@@ -487,7 +505,7 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
                             JACKPOT 
                         </p>
                         <div className="flex w-full justify-center">
-                            <div className="font-bold text-black text-sm xs:text-xl lg:text-3xl 4xl:text-6xl">
+                            <div className="w-full h-full font-bold text-black text-sm xs:text-xl lg:text-3xl 4xl:text-6xl">
                                 { 
                                     deployedContractData &&
                                     <JackpotBalance address={deployedContractData.address} />
