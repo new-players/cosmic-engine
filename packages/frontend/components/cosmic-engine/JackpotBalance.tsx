@@ -69,25 +69,34 @@ export const JackpotBalance = ({ address, className = "", usdMode, rawMode }: Ba
   }
 
   return (
-    <button
-      className={`btn btn-sm btn-ghost flex flex-col font-normal justify-start hover:bg-transparent ${className}`}
-      onClick={toggleBalanceMode}
-    >
-      <div className="w-full flex">
-        {displayUsdMode ? (
-          <div className="flex w-full justify-center">
-            <div className="font-bold text-black text-sm xs:text-xl lg:text-3xl 4xl:text-6xl">
-            {`${formattedBalance} GWEI`}
-            </div>
+    <div className="relative w-full h-full group">
+      <div className="w-full h-full truncate">
+        <button
+          className={`w-full btn btn-sm btn-ghost flex flex-col font-normal justify-start hover:bg-transparent ${className} `}
+          onClick={toggleBalanceMode}
+        >
+          <div className="w-full h-full flex justify-start">
+            {displayUsdMode ? (
+              <div className="flex w-full justify-center">
+                <div className="font-bold text-black text-sm xs:text-xl lg:text-3xl 4xl:text-6xl truncate">
+                {`${formattedBalance} GWEI`}
+                </div>
+              </div>
+            ) : (
+              <div className="flex w-full h-full justify-center overflow-hidden border">
+                <div className="font-bold text-black text-sm xs:text-xl lg:text-3xl 4xl:text-6xl truncate">
+                  {`${formattedBalance} GWEI`}
+                </div>
+              </div>
+            )}
           </div>
-        ) : (
-          <div className="flex w-full justify-center">
-            <div className="font-bold text-black text-sm xs:text-xl lg:text-3xl 4xl:text-6xl whitespace-nowrap">
-              {`${formattedBalance} GWEI`}
-            </div>
-          </div>
-        )}
+        </button>
+        <div class="absolute left-1/2 bottom-full mb-2 transform -translate-x-1/2 opacity-0 px-3 py-1 text-sm text-white bg-gray-700 rounded-xl group-hover:opacity-100 transition-opacity duration-300">
+          {`${formattedBalance} GWEI`}
+          {/* arrow pointing downward */}
+          <div className="absolute bottom-[-5px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-t-[5px] border-t-gray-700 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent"></div>
+        </div>
       </div>
-    </button>
+    </div>
   );
 };

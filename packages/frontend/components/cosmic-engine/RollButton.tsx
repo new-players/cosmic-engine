@@ -64,7 +64,7 @@ export const RollButton = ({
   const [pressed, setPressed] = useState(false);
 
   const buttonAudio = new Audio('/sounds/button_default.wav');
-  const errorAudio = new Audio('/sounds/error.wav');
+  const errorAudio = new Audio('/sounds/outcome_bust.wav');
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {

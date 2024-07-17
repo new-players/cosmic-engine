@@ -64,6 +64,7 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
         { color: '#242424', type: 3 },
         { color: '#7a4f9b', type: 4 },
     ];
+    const wheelRef = useSpringRef();
     const slices = prizes.length;
     const angle = 360 / slices;
     const [ initialLoop, setInitialLoop ] = useState(true);
@@ -82,7 +83,7 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
 
     // Sounds
     const outcome_bust = useRef<HTMLAudioElement | undefined>(
-        typeof Audio !== "undefined" ? new Audio('/sounds/outcome_bust.wav') 
+        typeof Audio !== "undefined" ? new Audio('/sounds/error.wav')
         : undefined
     )
 
@@ -133,9 +134,7 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
 
     useEffect(() => {
         setPrizeAngle(getAngle())
-    }, [prizeWon]);
-
-    
+    }, [prizeWon]);    
 
     const handleWrite = async () => {
         if (writeContractAsync && deployedContractData) {
@@ -240,7 +239,10 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
         });
     }
 
+    // handleWheelUpdate
+
     const rotateSpring = useSpring({
+        ref: wheelRef,
         from: { rotation:  isNaN(prizeAngle) ? 70 : prizeAngle },
         to: async(next, cancel) => {
             if (wheelState === 'notMoving') {
@@ -280,6 +282,8 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
             }
         },
     })
+
+    //isWheelActive, initialLoop, initiateWheel
 
     const getAngle = () => {
         if (prizeWon) {
@@ -487,7 +491,7 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
                             JACKPOT 
                         </p>
                         <div className="flex w-full justify-center">
-                            <div className="font-bold text-black text-sm xs:text-xl lg:text-3xl 4xl:text-6xl">
+                            <div className="w-full h-full font-bold text-black text-sm xs:text-xl lg:text-3xl 4xl:text-6xl">
                                 { 
                                     deployedContractData &&
                                     <JackpotBalance address={deployedContractData.address} />
