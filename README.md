@@ -1,6 +1,6 @@
-# Cosmic Engine 🌞
+# Degen Trail 🛤️
 
-A full-stack framework to make on-chain games
+Built on Cosmic Engine: A full-stack framework to make on-chain games
 
 ## Components
 
