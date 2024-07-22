@@ -12,10 +12,13 @@ import {
   ChevronDownIcon,
   DocumentDuplicateIcon,
   QrCodeIcon,
+  UserCircleIcon
 } from "@heroicons/react/24/outline";
 import { BlockieAvatar, isENS } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 import { getTargetNetworks } from "~~/utils/scaffold-eth";
+import Link from "next/link";
+
 
 const allowedNetworks = getTargetNetworks();
 
@@ -61,6 +64,17 @@ export const AddressInfoDropdown = ({
         >
           <NetworkOptions hidden={!selectingNetwork} />
           <li className={selectingNetwork ? "hidden" : ""}>
+            <button className="menu-item btn-sm !rounded-xl flex gap-3 py-3" type="button">
+              <UserCircleIcon className="h-6 w-4 ml-2 sm:ml-0" />
+
+              <Link href={blockExplorerAddressLink ? blockExplorerAddressLink : ""} passHref>              
+                Account Settings
+              </Link>
+            </button>
+          </li>      
+
+
+          <li className={selectingNetwork ? "hidden" : ""}>
             {addressCopied ? (
               <div className="btn-sm !rounded-xl flex gap-3 py-3">
                 <CheckCircleIcon
@@ -89,12 +103,17 @@ export const AddressInfoDropdown = ({
               </CopyToClipboard>
             )}
           </li>
+          { /*
+
           <li className={selectingNetwork ? "hidden" : ""}>
             <label htmlFor="qrcode-modal" className="btn-sm !rounded-xl flex gap-3 py-3">
               <QrCodeIcon className="h-6 w-4 ml-2 sm:ml-0" />
               <span className="whitespace-nowrap">View QR Code</span>
             </label>
           </li>
+
+          */ }
+          
           <li className={selectingNetwork ? "hidden" : ""}>
             <button className="menu-item btn-sm !rounded-xl flex gap-3 py-3" type="button">
               <ArrowTopRightOnSquareIcon className="h-6 w-4 ml-2 sm:ml-0" />

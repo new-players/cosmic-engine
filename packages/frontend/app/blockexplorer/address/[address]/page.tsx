@@ -51,7 +51,7 @@ const getContractData = async (address: string) => {
     "..",
     "..",
     "..",
-    "hardhat",
+    "contracts",
     "artifacts",
     "build-info",
   );
