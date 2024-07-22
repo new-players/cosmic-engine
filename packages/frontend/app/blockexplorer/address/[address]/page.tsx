@@ -22,6 +22,7 @@ async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath
     const buildInfo = JSON.parse(fs.readFileSync(filePath, "utf8"));
 
     if (buildInfo.output.contracts[contractPath]) {
+
       for (const contract in buildInfo.output.contracts[contractPath]) {
         bytecode = buildInfo.output.contracts[contractPath][contract].evm.bytecode.object;
         assembly = buildInfo.output.contracts[contractPath][contract].evm.bytecode.opcodes;
@@ -63,7 +64,7 @@ const getContractData = async (address: string) => {
   const deployedContractsOnChain = contracts ? contracts[chainId] : {};
   for (const [contractName, contractInfo] of Object.entries(deployedContractsOnChain)) {
     if (contractInfo.address.toLowerCase() === address.toLowerCase()) {
-      contractPath = `contracts/${contractName}.sol`;
+      contractPath = `src/${contractName}.sol`;
       break;
     }
   }
@@ -89,6 +90,7 @@ const AddressPage = async ({ params }: PageProps) => {
   if (isZeroAddress(address)) return null;
 
   const contractData: { bytecode: string; assembly: string } | null = await getContractData(address);
+
   return <AddressComponent address={address} contractData={contractData} />;
 };
 
