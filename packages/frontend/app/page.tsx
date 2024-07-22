@@ -25,7 +25,7 @@ export default function Home({searchParams}: SearchPageProps) {
         className="h-full" 
         style={{ 
           fontFamily: "Inter, sans-serif",
-          background: "linear-gradient(0deg, #C30B9C 0%, #569FBF 63%, #95C7DD 100%)"
+          background: "#1D1D1D"
         }}
       >
         <div className="absolute inset-0 z-[-1]" style={{
