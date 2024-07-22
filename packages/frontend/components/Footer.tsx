@@ -55,35 +55,37 @@ export const Footer = () => {
         </div>
       </div>
       <div className="w-full">
-        <ul className="menu menu-horizontal w-full">
-          <div className="flex justify-center items-center gap-2 text-sm w-full">
-            <div className="text-center">
-              <a href="https://github.com/new-players/cosmic-engine" target="_blank" rel="noreferrer" className="link">
-                Fork me
-              </a>
+        {/*
+          <ul className="menu menu-horizontal w-full">
+            <div className="flex justify-center items-center gap-2 text-sm w-full">
+              <div className="text-center">
+                <a href="https://github.com/new-players/cosmic-engine" target="_blank" rel="noreferrer" className="link">
+                  Fork me
+                </a>
+              </div>
+              <span>·</span>
+              <div className="flex justify-center items-center gap-2">
+                <p className="m-0 text-center">
+                  Built with <HeartIcon className="inline-block h-4 w-4" /> at the
+                </p>
+                <a
+                  className="flex justify-center items-center gap-1"
+                  href="https://npc.institute/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <span className="link">New Players Institute</span>
+                </a>
+              </div>
+              <span>·</span>
+              <div className="text-center">
+                <a href="https://github.com/new-players/cosmic-engine/issues" target="_blank" rel="noreferrer" className="link">
+                  Support
+                </a>
+              </div>
             </div>
-            <span>·</span>
-            <div className="flex justify-center items-center gap-2">
-              <p className="m-0 text-center">
-                Built with <HeartIcon className="inline-block h-4 w-4" /> at the
-              </p>
-              <a
-                className="flex justify-center items-center gap-1"
-                href="https://npc.institute/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span className="link">New Players Institute</span>
-              </a>
-            </div>
-            <span>·</span>
-            <div className="text-center">
-              <a href="https://github.com/new-players/cosmic-engine/issues" target="_blank" rel="noreferrer" className="link">
-                Support
-              </a>
-            </div>
-          </div>
-        </ul>
+          </ul>
+          */}
       </div>
     </div>
   );

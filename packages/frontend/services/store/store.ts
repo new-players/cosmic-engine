@@ -33,6 +33,6 @@ export const useGlobalState = create<GlobalState>(set => ({
   setUserCurrency: (newValue: number): void => set(() => ({ userCurrency: newValue })),
   itemImages: [],
   setItemImages: (newItemImages: Buffer[]) => set(() => ({ itemImages: newItemImages})),
-  cosmicConsole: false,
+  cosmicConsole: true,
   setCosmicConsole: (newCosmicConsoleState: boolean) => set(() => ({ cosmicConsole: newCosmicConsoleState})),
 }));
