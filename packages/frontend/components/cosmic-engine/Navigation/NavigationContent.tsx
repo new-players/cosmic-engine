@@ -5,10 +5,12 @@ import { JackpotJunction } from '~~/components/cosmic-engine'
 import Wagon from '~~/components/cosmic-engine/Wagon'
 import DegenGuy from '~~/public/degen-guy.png';
 import Image from 'next/image';
+import InstructionModal from "~~/components/cosmic-engine/instruction-modal";
 
 export default function NavigationContent ({tab}: {tab: string | null}) {
     return(
         <div className="relative flex flex-col grow my-[1rem] 4xl:my-[8rem]">
+            <InstructionModal />
             { tab === 'wagon' ?
                 <Suspense>
                     <Wagon />
