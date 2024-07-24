@@ -2,27 +2,27 @@ import {useState} from "react";
 import Image from "next/image";
 
 
-const firstCard = (
-    <div className="flex flex-col items-center justify-center gap-y-5">
+const introCard = (
+    <div className="flex flex-col items-center justify-center gap-y-5 text-[#F1F1F1]">
         <h2 className="font-bold text-lg text-center">SPIN TO WIN!</h2>
         <div className="relative w-full aspect-square max-w-[180px]">
             <Image src="/instructionAssets/miniWheel.png" fill alt="Spin to win" />
         </div>
         <div className="flex flex-wrap flex-col gap-y-4 w-full px-2">
             <div className="flex gap-2 justify-start items-center w-full">
-                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20"></div>
+                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20 flex-shrink-0"></div>
                 <div >
                     Spin the wheel to win items and ETH!
                 </div>
             </div>
             <div className="flex gap-2 justify-start items-center w-full">
-                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20"></div>
+                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20 flex-shrink-0"></div>
                 <div >
                     One spin costs X GWEI.
                 </div>
             </div><div className="flex gap-2 justify-start items-center w-full">
-                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20"></div>
-                <div >
+                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20 flex-shrink-0"></div>
+                <div>
                     Collect items and build a wagon to unlock the Bonus Wheel. (It boosts your odds of winning items and ETH.)
                 </div>
             </div>
@@ -30,7 +30,7 @@ const firstCard = (
     </div>
 );
 
-const secondCard = (
+const respinCard = (
     <div className="flex flex-col items-center justify-center gap-y-5">
         <h2 className="font-bold text-lg text-center">ACCEPT OR RESPIN</h2>
         <div className="relative w-full aspect-[3/4] max-w-[180px]">
@@ -38,18 +38,18 @@ const secondCard = (
         </div>
         <div className="flex flex-wrap flex-col gap-y-4 w-full px-2">
             <div className="flex gap-2 justify-start items-center w-full">
-                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20"></div>
+                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20 flex-shrink-0"></div>
                 <div >
                     Accept your prize or respin before the timer runs out!
                 </div>
             </div>
             <div className="flex gap-2 justify-start items-center w-full">
-                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20"></div>
+                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20 flex-shrink-0"></div>
                 <div >
                     Respins are cheaper than regular spins (Y vs X GWEI).
                 </div>
             </div><div className="flex gap-2 justify-start items-center w-full">
-                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20"></div>
+                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20 flex-shrink-0"></div>
                 <div >
                     Hurry: Unclaimed prizes go poof!
                 </div>
@@ -58,7 +58,7 @@ const secondCard = (
     </div>
 );
 
-const thirdCard = (
+const bonusWheelCard = (
     <div className="flex flex-col items-center justify-center gap-y-5">
         <h2 className="font-bold text-lg text-center">UNLOCK THE BONUS WHEEL</h2>
         <div className="relative w-full aspect-square max-w-[180px]">
@@ -66,18 +66,18 @@ const thirdCard = (
         </div>
         <div className="flex flex-wrap flex-col gap-y-4 w-full px-2">
             <div className="flex gap-2 justify-start items-center w-full">
-                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20"></div>
+                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20 flex-shrink-0"></div>
                 <div >
                     To unlock the Bonus Wheel, build a top-tier wagon of matching parts.
                 </div>
             </div>
             <div className="flex gap-2 justify-start items-center w-full">
-                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20"></div>
+                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20 flex-shrink-0"></div>
                 <div >
                     Matching = same terrain (same row)
                 </div>
             </div><div className="flex gap-2 justify-start items-center w-full">
-                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20"></div>
+                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20 flex-shrink-0"></div>
                 <div >
                     Top tier = the highest-tier version of that item that any player has crafted
                 </div>
@@ -86,7 +86,7 @@ const thirdCard = (
     </div>
 );
 
-const fourthCard = (
+const wagonCard = (
     <div className="flex flex-col items-center justify-center gap-y-5">
         <h2 className="font-bold text-lg text-center">BUILD YOUR WAGON</h2>
         <div className="relative w-full aspect-square max-w-[180px]">
@@ -94,7 +94,7 @@ const fourthCard = (
         </div>
         <div className="relative flex flex-wrap flex-col gap-y-4 w-full px-2">
             <div className="flex gap-2 justify-start items-center w-full">
-                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20"></div>
+                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20 flex-shrink-0"></div>
                 <div>
                     Equip and upgrade your wagon on the Inventory screen.
                 </div>
@@ -103,13 +103,13 @@ const fourthCard = (
                 <Image src="/instructionAssets/menu.png" fill alt="menu" />
             </div>
             <div className="flex gap-2 justify-start items-center w-full">
-                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20"></div>
+                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20 flex-shrink-0"></div>
                 <div >
                     Select an item and choose Equip to add it to your wagon.
                 </div>
             </div>
             <div className="flex gap-2 justify-start items-center w-full">
-                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20"></div>
+                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20 flex-shrink-0"></div>
                 <div >
                     Choose items from the same terrain (same row).
                 </div>
@@ -118,7 +118,7 @@ const fourthCard = (
                 <Image src="/instructionAssets/matching-row.png" fill alt="matching row" />
             </div>
             <div className="flex gap-2 justify-start items-center w-full">
-                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20"></div>
+                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20 flex-shrink-0"></div>
                 <div>
                     Upgrade items by combining two items of the same tier and type.
                 </div>
@@ -127,54 +127,24 @@ const fourthCard = (
     </div>
 );
 
-const fifthCard = (
-    <div className="flex flex-col items-center justify-center gap-y-5">
-        <h2 className="font-bold text-lg text-center">BUILD YOUR WAGON II</h2>
-        <div className="relative w-full pt-[95%]">
-            <Image src="/instructionAssets/craft.png" fill alt="crafting" />
-        </div>
-        <div className="relative flex flex-wrap flex-col gap-y-4 w-full px-2">
-            <div className="flex gap-2 justify-start items-center w-full">
-                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20"></div>
-                <div>
-                Equip and upgrade your wagon on the Inventory screen.
-                </div>
-            </div>
-            <div className="flex gap-2 justify-start items-center w-full">
-                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20"></div>
-                <div >
-                    Select an item and choose Equip to add it to your wagon. Pick items from the same terrain (same row).
-                </div>
-            </div>
-            <div className="flex gap-2 justify-start items-center w-full">
-                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20"></div>
-                <div >
-                    Upgrade items by combining two items of the same tier and type.
-                </div>
-            </div>
-        </div>
-    </div>
-)
-
-
-const sixthCard = (
+const conclusionCard = (
     <div className="flex flex-col items-center justify-center gap-y-5">
         <h2 className="font-bold text-lg text-center">GOT IT?</h2>
         <div className="relative flex flex-wrap flex-col gap-y-4 w-full px-2">
             <div className="flex gap-2 justify-start items-center w-full">
-                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20"></div>
+                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20 flex-shrink-0"></div>
                 <div>
                     Spin the wheel. Win items and ETH.
                 </div>
             </div>
             <div className="flex gap-2 justify-start items-center w-full">
-                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20"></div>
+                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20 flex-shrink-0"></div>
                 <div >
                     Accept the outcome or respin.
                 </div>
             </div>
             <div className="flex gap-2 justify-start items-center w-full">
-                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20"></div>
+                <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20 flex-shrink-0"></div>
                 <div >
                     Collect items, upgrade to a top-tier wagon, and unlock the bonus wheel to up your odds of winning ETH.
                 </div>
@@ -185,12 +155,11 @@ const sixthCard = (
 
 // To create a new instruction card, add a new jsx card to the instructionContents array.
 const instructionContents = [
-    firstCard,
-    secondCard,
-    thirdCard,
-    fourthCard,
-    fifthCard,
-    sixthCard,
+    introCard,
+    respinCard,
+    bonusWheelCard,
+    wagonCard,
+    conclusionCard,
 ]
 
 
