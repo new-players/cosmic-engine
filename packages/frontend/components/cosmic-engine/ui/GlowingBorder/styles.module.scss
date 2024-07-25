@@ -1,0 +1,49 @@
+@mixin glowingCard($color1, $color2, $color3, $index){
+  width: 100%;
+  height: 100%;
+  padding: 0.7rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle, rgba($color1, 0.5) 20%, rgba(darken($color1,15%), 1) 100%);
+  color: $color1;
+  text-align: center;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 0 2px 3px $color1;
+  animation: shadows-#{$index} 3s infinite;
+
+  @keyframes shadows-#{$index} {
+      0% {
+        text-shadow: $color1 0 0 10px;
+        box-shadow: 0px 0px 3px 3px $color1;
+      }
+      50% {
+        text-shadow: $color2 0 0 10px;
+        box-shadow: 0px 0px 4px 5px $color2;
+      }
+      100% {
+        text-shadow: $color1 0 0 10px;
+        box-shadow: 0px 0px 3px 3px $color1;
+      }
+    }
+} 
+// bug where it always applies the last class color
+
+// Tier Colors
+$tiers: (
+  (#ffffff, white, white),
+  (#008000, #32cd32, #006400),
+  (#48abe0, #5cbbe9 , #0e67ab ),
+  (#800080, #8a2be2, #663399),
+  (#ffa500, #ff8c00, #ff7f50),
+  (#ffd700, #daa520, #b8860b),
+  (#ff0000, #dc143c, #8b0000),
+);
+
+@for $i from 1 through length($tiers) {
+  $colors: nth($tiers, $i);
+  .glowing-card-tier#{$i}{
+    @include glowingCard(nth($colors, 1), nth($colors, 2), nth($colors, 3), $i);
+  }
+}
