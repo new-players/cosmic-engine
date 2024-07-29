@@ -6,10 +6,23 @@ import Wagon from '~~/components/cosmic-engine/Wagon'
 import DegenGuy from '~~/public/degen-guy.png';
 import Image from 'next/image';
 import InstructionModal from "~~/components/cosmic-engine/instruction-modal";
+import { useDispatch } from 'react-redux';
+import { setIsOpen } from '~~/store/showInstructionsSlice';
 
 export default function NavigationContent ({tab}: {tab: string | null}) {
+    const dispatch = useDispatch();
+
     return(
         <div className="relative flex flex-col grow my-[1rem] 4xl:my-[8rem]">
+            <div 
+                className="absolute flex cursor-pointer justify-center items-center top-0 right-5 w-[28px] h-[28px] rounded-full border-[3px] border-solid border-[#6f2e71]" 
+                onClick={() => {
+                    dispatch(setIsOpen(true));
+
+                }}
+            >
+                ?
+            </div>
             <InstructionModal />
             { tab === 'wagon' ?
                 <Suspense>
