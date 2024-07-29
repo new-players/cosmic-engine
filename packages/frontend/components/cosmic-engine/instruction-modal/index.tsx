@@ -1,6 +1,8 @@
 import {useState} from "react";
 import Image from "next/image";
-
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '~~/store/rootReducer';
+import { setCurrentStep, setIsOpen } from '~~/store/showInstructionsSlice';
 
 const introCard = (
     <div className="flex flex-col items-center justify-center gap-y-5 text-[#F1F1F1]">
@@ -164,8 +166,10 @@ const instructionContents = [
 
 
 const InstructionModal = () => {
-    const [currentStep, setCurrentStep] = useState(0);
-    const [isOpen, setIsopen] = useState(true);
+    const dispatch = useDispatch();
+    const currentStep = useSelector((state: RootState) => state.showInstructions.currentStep);
+    const isOpen = useSelector((state: RootState) => state.showInstructions.isOpen);
+
     return (
         <div className={`fixed inset-0 ${isOpen ? 'flex' : 'hidden'} items-center justify-center z-50`}>
             <div className={`modal ${isOpen ? "modal-open" : ''}`}>
@@ -188,7 +192,7 @@ const InstructionModal = () => {
                                     key={index}
                                     className={`rounded-full w-2 h-2 bg-[#F1CF14] hover:bg-[#F1CF14] hover:opacity-100 ${currentStep >= index ? 'opacity-100': 'opacity-50'}`}
                                     onClick={()=>{
-                                        setCurrentStep(index);
+                                        dispatch(setCurrentStep(index));
                                     }}
                                 />
                             );
@@ -198,9 +202,9 @@ const InstructionModal = () => {
                         className="w-full btn rounded bg-[#3D088F] border-solid border-[1px] border-[#EB28E3] text-[#EB28E3] text-lg font-jost font-bold hover:bg-[#5A2EBF] hover:text-[#C01CBA]"
                         onClick={()=>{
                             if(currentStep < instructionContents.length - 1){
-                                setCurrentStep(currentStep + 1);
+                                dispatch(setCurrentStep(currentStep + 1));
                             } else {
-                                setIsopen(false);
+                                dispatch(setIsOpen(false));
                             }
                         }}
                     >
