@@ -17,9 +17,12 @@ export async function POST(req: Request) {
     }
 
     const outputUrl = await glifClient.sendGlifRequest(
-      hookData.data.text.replace("cosmobot", ""),
       "",
-      'WOJAK',
+      {
+        "prompt": hookData.data.text.replace("cosmobot", ""),
+        "image-input": hookData.data.embeds[0].url
+      },
+      'SPARK',
     );
 
     console.log("PROMPT FINISHED: " + outputUrl);

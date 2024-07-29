@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export type OutputType = 'WOJAK' | 'IKEA';
+export type OutputType = 'WOJAK' | 'IKEA' | 'SPARK' | 'LLM';
 
 export class GlifHelper {
   private glifEndpoint: string;
@@ -35,10 +35,11 @@ export class GlifHelper {
   }
 
   async sendGlifRequest(
-    prompText: string,
-    outputType: OutputType = 'WOJAK',
+    prompText: string | null = "",
+    prompObject: any | null = "",
+    outputType: OutputType,
   ): Promise<string> {
-    let result: string | null;
+    let result: string | null = '';
 
     if (outputType === 'WOJAK') {
       const payload = {
@@ -48,9 +49,23 @@ export class GlifHelper {
         ]
       }
       result = await this.sendGlifAPiRequest(payload);
-    } else {
+    } else if (outputType === 'IKEA') {
       const payload = {
         "id": "clv6udtg90001shfnzinpnpp9",
+        "inputs": [
+          prompText
+        ]
+      }
+      result = await this.sendGlifAPiRequest(payload);
+    } else if (outputType === 'SPARK') {
+      const payload = {
+        "id": "clyrcr6kb000012ntpmoa5wzb",
+        "inputs": prompObject
+      }
+      result = await this.sendGlifAPiRequest(payload);
+    } else if (outputType === 'LLM') {
+      const payload = {
+        "id": "clywwo5xd0000a4t3s40qwp0a",
         "inputs": [
           prompText
         ]

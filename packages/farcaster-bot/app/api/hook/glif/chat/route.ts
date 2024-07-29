@@ -16,50 +16,25 @@ export async function POST(req: Request) {
       throw new Error("Make sure you set SIGNER_UUID in your .env file");
     }
 
-    const outputUrl = await glifClient.sendGlifRequest(
+    const outputText = await glifClient.sendGlifRequest(
       hookData.data.text.replace("cosmobot", ""),
       "",
-      'WOJAK',
+      'LLM',
     );
 
-    console.log("PROMPT FINISHED: " + outputUrl);
+    console.log("PROMPT FINISHED: " + outputText);
 
-    const creationRequest: NeynarFrameCreationRequest = {
-      name: `sparked image ${hookData.data.author.username}`,
-      pages: [
-        {
-          image: {
-            url: outputUrl,
-            aspect_ratio: "1:1",
-          },
-          title: "Sparked Image",
-          buttons: [],
-          input: {
-            text: {
-              enabled: false,
-            },
-          },
-          uuid: "spark",
-          version: "vNext",
-        },
-      ],
-    };
-    const frame = await neynarClient.publishNeynarFrame(creationRequest);
     const reply = await neynarClient.publishCast(
       process.env.SIGNER_UUID ?? '',
-      "Here's a meme for you",
+      outputText,
       {
         replyTo: hookData.data.hash,
-        embeds: [
-          {
-            url: frame.link
-          }
-        ]
+        embeds: []
       }
     );
     console.log(`Replied to the cast with hash: ${reply.hash}`)
 
-    return new Response(`Finished creating meme with url ${outputUrl}`);
+    return new Response(`Finished answering to chat with response: ${outputText}`);
   } catch (e: any) {
     console.log(e.message, { status: 500 })
     return new Response(e.message, { status: 500 });
