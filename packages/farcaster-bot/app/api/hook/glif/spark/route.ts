@@ -16,6 +16,16 @@ export async function POST(req: Request) {
       throw new Error("Make sure you set SIGNER_UUID in your .env file");
     }
 
+    const initReply = await neynarClient.publishCast(
+      process.env.SIGNER_UUID ?? '',
+      "Now sparking your image, please wait… ⏳",
+      {
+        replyTo: hookData.data.hash,
+        embeds: []
+      }
+    );
+    console.log(`Init replied to the cast with hash: ${initReply.hash}`)
+
     const outputUrl = await glifClient.sendGlifRequest(
       "",
       {
@@ -50,7 +60,7 @@ export async function POST(req: Request) {
     const frame = await neynarClient.publishNeynarFrame(creationRequest);
     const reply = await neynarClient.publishCast(
       process.env.SIGNER_UUID ?? '',
-      "Here's a meme for you",
+      "Sparked⚡",
       {
         replyTo: hookData.data.hash,
         embeds: [
