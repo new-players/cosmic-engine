@@ -20,9 +20,10 @@ const introCard = (
             <div className="flex gap-2 justify-start items-center w-full">
                 <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20 flex-shrink-0"></div>
                 <div >
-                    One spin costs X GWEI.
+                    One spin costs 100 GWEI.
                 </div>
-            </div><div className="flex gap-2 justify-start items-center w-full">
+            </div>
+            <div className="flex gap-2 justify-start items-center w-full">
                 <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20 flex-shrink-0"></div>
                 <div>
                     Collect items and build a wagon to unlock the Bonus Wheel. (It boosts your odds of winning items and ETH.)
@@ -33,7 +34,7 @@ const introCard = (
 );
 
 const respinCard = (
-    <div className="flex flex-col items-center justify-center gap-y-5">
+    <div className="flex flex-col items-center justify-center gap-y-5 text-[#F1F1F1]">
         <h2 className="font-bold text-lg text-center">ACCEPT OR RESPIN</h2>
         <div className="relative w-full aspect-[3/4] max-w-[180px]">
             <Image src="/instructionAssets/respin.png" fill alt="Accept or respin" />
@@ -48,7 +49,7 @@ const respinCard = (
             <div className="flex gap-2 justify-start items-center w-full">
                 <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20 flex-shrink-0"></div>
                 <div >
-                    Respins are cheaper than regular spins (Y vs X GWEI).
+                    Respins are cheaper than regular spins (25 vs 100 GWEI).
                 </div>
             </div><div className="flex gap-2 justify-start items-center w-full">
                 <div className="rounded-full w-[10px] h-[10px] bg-[white] opacity-20 flex-shrink-0"></div>
@@ -61,7 +62,7 @@ const respinCard = (
 );
 
 const bonusWheelCard = (
-    <div className="flex flex-col items-center justify-center gap-y-5">
+    <div className="flex flex-col items-center justify-center gap-y-5 text-[#F1F1F1]">
         <h2 className="font-bold text-lg text-center">UNLOCK THE BONUS WHEEL</h2>
         <div className="relative w-full aspect-square max-w-[180px]">
             <Image src="/instructionAssets/bonus.png" fill alt="Bonus wheel" />
@@ -89,7 +90,7 @@ const bonusWheelCard = (
 );
 
 const wagonCard = (
-    <div className="flex flex-col items-center justify-center gap-y-5">
+    <div className="flex flex-col items-center justify-center gap-y-5 text-[#F1F1F1]">
         <h2 className="font-bold text-lg text-center">BUILD YOUR WAGON</h2>
         <div className="relative w-full aspect-square max-w-[180px]">
             <Image src="/instructionAssets/wagon.png" fill alt="Bonus wheel" />
@@ -130,7 +131,7 @@ const wagonCard = (
 );
 
 const conclusionCard = (
-    <div className="flex flex-col items-center justify-center gap-y-5">
+    <div className="flex flex-col items-center justify-center gap-y-5 text-[#F1F1F1]">
         <h2 className="font-bold text-lg text-center">GOT IT?</h2>
         <div className="relative flex flex-wrap flex-col gap-y-4 w-full px-2">
             <div className="flex gap-2 justify-start items-center w-full">
@@ -169,21 +170,23 @@ const InstructionModal = () => {
     const dispatch = useDispatch();
     const currentStep = useSelector((state: RootState) => state.showInstructions.currentStep);
     const isOpen = useSelector((state: RootState) => state.showInstructions.isOpen);
-
     return (
         <div className={`fixed inset-0 ${isOpen ? 'flex' : 'hidden'} items-center justify-center z-50`}>
             <div className={`modal ${isOpen ? "modal-open" : ''}`}>
                 <div className="modal-box bg-[#1D1D1D] border-solid border-[1px] border-[#F1CF14]">
-                    <div className="carousel w-full">
-                        {
-                            instructionContents.map((content, index) => {
-                                return (
-                                    <div key={index} className={`carousel-item w-full ${currentStep === index ? 'block' : 'hidden'}`}>
-                                        {content}
-                                    </div>
-                                );
-                            })
-                        }
+                    <div className="w-full h-[460px] overflow-y-auto relative ">
+                        <div className="carousel">
+                            {
+                                instructionContents.map((content, index) => {
+                                    return (
+                                        <div key={index} className={`carousel-item w-full ${currentStep === index ? 'block' : 'hidden'}`}>
+                                            {content}
+                                        </div>
+                                    );
+                                })
+                            }
+
+                        </div>
                     </div>
                     <div className="flex w-full justify-center gap-2 py-6">
                         { instructionContents.map((content, index) => {
