@@ -19,6 +19,7 @@ import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 import { useAccount } from "wagmi"
 import { Address } from 'viem';
 import { useGlobalState } from "~~/services/store/store";
+import Image from 'next/image';
 
 export default function WagonScreen(){
 
@@ -39,6 +40,10 @@ export default function WagonScreen(){
     const [tier, setTier] = useState(1);
     const itemImages = useGlobalState(state => state.itemImages);
     const [refreshDisplayVariables, triggerRefreshDisplayVariables] = useReducer(value => !value, false);
+    const [isArrowPrevPressed, setIsArrowPrevPressed] = useState(false);
+    const [isArrowNextPressed, setIsArrowNextPressed] = useState(false);
+    const arrowImage = '/wagon/arrow.png';
+    const arrowPressedImage = '/wagon/arrow-pressed.png';
 
     // const { data: hasBonus } = useScaffoldReadContract({
     //     contractName: JJ_CONTRACT_NAME,
@@ -136,22 +141,27 @@ export default function WagonScreen(){
 
     return (
         <div className="flex justify-center h-full">
-            <div className="overflow-x-hidden text-[black] h-full justify-center items-center px-[1rem] pt-3 max-w-[720px]">
-                <div className="bg-gray-300 w-full flex flex-col grow h-full gap-y-4 px-4 rounded-b-2xl">
+            <div className="overflow-x-hidden text-[black] h-full justify-center items-center px-[1rem] pt-1 max-w-[720px]">
+                <div className="bg-[#1B1B1B] w-full flex flex-col grow h-full gap-y-4 px-4 rounded-b-2xl border-solid border-[2px] border-[#FF7200]">
                     {/* Wagon Section */}
-                    <div className="text-center">
-                        <p className="font-bold" style={{ lineHeight: '0.25rem' }}>Your Wagon</p>
-                        <p style={{ fontSize: '0.75rem', lineHeight: '0.5rem'}}>Equip a full set to get better spin odds!</p>
-
+                    <div className="flex gap-x-4 justify-center items-center pt-5">
+                        <div className="relative aspect-[57/37] w-[80px]">
+                            <div className="absolute w-full h-full ">
+                                <Image fill src="/wagon/skull-detail.png" alt='cow skull'/>
+                            </div>
+                        </div>
+                        <div className="flex-col justify-start">
+                            <p className="font-bold text-lg lg:text-2xl text-[#FF7200]" style={{ lineHeight: '0.25rem' }}>Your Wagon</p>
+                            <p className="text-[#FF7200] text-xs lg:text-sm">Equip a full set to get better spin odds!</p>
+                        </div>
                     </div>
 
                     <div className="flex flex-col h-full max-h-[20%] gap-x-4">
-                        <div className="flex justify-between py-2">
-                        </div>
                         {/* 2.60 */}
-                        <div className=" flex justify-between items-center gap-x-6 w-full h-full">
-                            <div className="flex justify-center w-full">
-                                <div className="w-[260px] xs:w-[400px] md:w-[400px] h-[156px] xs:h-[240px] md:h-[240px] -top-2 relative">
+                        <div className="relative flex justify-between items-center gap-x-6 w-full h-full py-4">
+                            <div className="absolute inset-0 bg-gray-300 opacity-[0.05]"/>
+                            <div className=" flex justify-center w-full">
+                                <div className=" w-[260px] xs:w-[400px] md:w-[400px] h-[156px] xs:h-[240px] md:h-[240px] -top-2 relative ">
                                     {
                                         <EquippedWagon 
                                             equippedBeasts={equippedBeasts}
@@ -178,14 +188,34 @@ export default function WagonScreen(){
                         */}
                     </div>
 
-                    <div className="w-full border border-[1px] border-[black]" /> {/* divider */}                    
+                    <div className="w-full border border-[1px] border-[#FF7200]" /> {/* divider */}
                     <div className="flex justify-between items-center">
-                        <button onClick={decrementTier} style={{ fontSize: '2rem' }}>⬅️</button>
-                        <div className="text-center">
-                            <p className="font-bold" style={{ lineHeight: '0.25rem', color: TIER_TEXT_COLORS[tier] }}>Tier {tier} </p>
-                            <p style={{ fontSize: '0.75rem', lineHeight: '0.25rem'}}>(Need {CRAFT_COST} to upgrade to next tier) </p>
+                        <div 
+                            className="relative rotate-180 cursor-pointer aspect-[44/13] w-[32px]" 
+                            onClick={decrementTier} 
+                            onMouseDown={()=> {setIsArrowPrevPressed(true)}}
+                            onMouseUp={()=> {setIsArrowPrevPressed(false)}}
+                            onMouseLeave={()=> {setIsArrowPrevPressed(false)}}
+                        >
+                            <div className="absolute inset-0">
+                                <Image fill src={isArrowPrevPressed ? arrowPressedImage : arrowImage } alt="arrow prev"/>
+                            </div>
                         </div>
-                        <button onClick={incrementTier} style={{ fontSize: '2rem' }}>➡️</button>
+                        <div className="text-center">
+                            <p className="font-bold text-[#FF7200]" style={{ lineHeight: '0.25rem' }}>TIER {tier} </p>
+                            <p className="text-xs text-[#FF7200]">COMBINE {CRAFT_COST} TO LEVEL UP </p>
+                        </div>
+                        <div 
+                            className="relative cursor-pointer aspect-[44/13] w-[32px]"
+                            onClick={incrementTier}
+                            onMouseDown={()=> {setIsArrowNextPressed(true)}}
+                            onMouseUp={()=> {setIsArrowNextPressed(false)}}
+                            onMouseLeave={()=> {setIsArrowNextPressed(false)}}
+                        >
+                            <div className="absolute inset-0">
+                                <Image fill src={isArrowNextPressed ? arrowPressedImage : arrowImage } alt="arrow prev"/>
+                            </div>
+                        </div>
                     </div>                    
                     {/* Market/Inventory Section */}
                     {
