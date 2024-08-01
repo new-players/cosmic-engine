@@ -173,6 +173,15 @@ const InstructionModal = () => {
     const modalRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        const cachedIsOpen = localStorage.getItem('isInstructionOpen');
+        if (cachedIsOpen === null) {
+            dispatch(setIsOpen(true));
+        } else {
+            dispatch(setIsOpen(cachedIsOpen === 'true'));
+        }
+    }, [dispatch]);
+
+    useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
                 dispatch(setIsOpen(false));
