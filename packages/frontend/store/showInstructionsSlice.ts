@@ -5,9 +5,14 @@ interface InstructionsState {
     isOpen:boolean;
 }
 
+const getInitialIsOpenState = (): boolean => {
+    const cachedIsOpen = localStorage.getItem('isInstructionOpen');
+    return cachedIsOpen !== 'false';
+};
+
 const initialState: InstructionsState = {
     currentStep: 0,
-    isOpen: true,
+    isOpen:  getInitialIsOpenState(),
 };
 
 const showInstructionsSlice = createSlice({
@@ -22,6 +27,11 @@ const showInstructionsSlice = createSlice({
                 state.currentStep = 0;
             }
             state.isOpen = action.payload;
+            if (action.payload === false) {
+                localStorage.setItem('isInstructionOpen', 'false');
+            } else {
+                localStorage.setItem('isInstructionOpen', 'true');
+            }
         },
     },
 });
