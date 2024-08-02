@@ -12,7 +12,8 @@ import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { toast } from 'react-hot-toast';
 import { Contract, ContractName } from "~~/utils/scaffold-eth/contract";
 import { Prize } from '~~/components/cosmic-engine/JackpotJunction';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '~~/store/rootReducer'
 import { setStartBlock } from '~~/store/startBlockSlice';
 import "~~/styles/roll-button.scss";
 
@@ -60,6 +61,7 @@ export const RollButton = ({
   const { targetNetwork } = useTargetNetwork();
   const writeDisabled = !chain || chain?.id !== targetNetwork.id ||  !isConnected;
   const { data: result, isPending, writeContractAsync } = useWriteContract();
+  const isBonusWheel = useSelector((state: RootState) => state.jackpotJunction.isBonusWheel);
   const dispatch = useDispatch();
   const [pressed, setPressed] = useState(false);
 
@@ -167,7 +169,12 @@ export const RollButton = ({
   }, [txResult]);
 
   return (
-    <div className="py-5 4xl:my-20 space-y-3 first:pt-0 last:pb-1">
+    <div className="relative py-5 4xl:my-20 space-y-3 first:pt-0 last:pb-1">
+      { isBonusWheel ? 
+        <div className="absolute rounded-xl h-[80%] w-full bg-gradient-to-b from-[#E2003F] to-[#7C0023] -translate-y-5 font-jost font-extrabold text-lg pt-1">
+          BONUS!
+        </div>
+      : null}
       <div className={`flex gap-3 flex-row justify-between items-center`}>
         <div className="flex justify-between gap-2">
           <div

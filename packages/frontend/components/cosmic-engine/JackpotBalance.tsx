@@ -78,13 +78,13 @@ export const JackpotBalance = ({ address, className = "", usdMode, rawMode }: Ba
           <div className="w-full h-full flex justify-start">
             {displayUsdMode ? (
               <div className="flex w-full justify-center">
-                <div className="font-bold text-black text-sm xs:text-xl lg:text-3xl 4xl:text-6xl truncate">
+                <div className="font-bold text-[#EB28E3]black text-sm xs:text-xl lg:text-3xl 4xl:text-6xl truncate">
                 {`${formattedBalance} GWEI`}
                 </div>
               </div>
             ) : (
               <div className="flex w-full h-full justify-center overflow-hidden">
-                <div className="font-bold text-black text-sm xs:text-xl lg:text-3xl 4xl:text-6xl truncate">
+                <div className="font-bold text-[#EB28E3] text-sm xs:text-xl lg:text-3xl 4xl:text-6xl truncate">
                   {`${formattedBalance} GWEI`}
                 </div>
               </div>
