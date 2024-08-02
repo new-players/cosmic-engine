@@ -7,7 +7,7 @@ interface InstructionsState {
 
 const initialState: InstructionsState = {
     currentStep: 0,
-    isOpen: true,
+    isOpen: false,
 };
 
 const showInstructionsSlice = createSlice({
@@ -22,6 +22,11 @@ const showInstructionsSlice = createSlice({
                 state.currentStep = 0;
             }
             state.isOpen = action.payload;
+            if (typeof window !== 'undefined' && action.payload === false) {
+                localStorage.setItem('isInstructionOpen', 'false');
+            } else if (typeof window !== 'undefined' && action.payload === true) {
+                localStorage.setItem('isInstructionOpen', 'true');
+            }
         },
     },
 });

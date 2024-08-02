@@ -1,4 +1,4 @@
-import {useState} from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '~~/store/rootReducer';
@@ -170,10 +170,39 @@ const InstructionModal = () => {
     const dispatch = useDispatch();
     const currentStep = useSelector((state: RootState) => state.showInstructions.currentStep);
     const isOpen = useSelector((state: RootState) => state.showInstructions.isOpen);
+    const modalRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const cachedIsOpen = localStorage.getItem('isInstructionOpen');
+        if (cachedIsOpen === null) {
+            dispatch(setIsOpen(true));
+        } else {
+            dispatch(setIsOpen(cachedIsOpen === 'true'));
+        }
+    }, [dispatch]);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+                dispatch(setIsOpen(false));
+            }
+        };
+
+        if (isOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isOpen, dispatch]);
+
     return (
         <div className={`fixed inset-0 ${isOpen ? 'flex' : 'hidden'} items-center justify-center z-50`}>
             <div className={`modal ${isOpen ? "modal-open" : ''}`}>
-                <div className="modal-box bg-[#1D1D1D] border-solid border-[1px] border-[#F1CF14]">
+                <div ref={modalRef} className="modal-box bg-[#1D1D1D] border-solid border-[1px] border-[#F1CF14]">
                     <div className="w-full h-[460px] overflow-y-auto relative ">
                         <div className="carousel">
                             {
