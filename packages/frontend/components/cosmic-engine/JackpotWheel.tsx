@@ -19,6 +19,8 @@ import { JackpotBalance } from "./JackpotBalance";
 import { MediumJackpotBalance } from "./MediumJackpotBalance";
 import { formatGwei } from "viem";
 import PrizeRing from "./PrizeRing";
+import { useSelector } from 'react-redux';
+import { RootState } from '~~/store/rootReducer'
 
 interface JackpotWheelProps {
     wheelState: string,
@@ -73,6 +75,7 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
     const [ prizeAngle, setPrizeAngle ] = useState(0);
     const [ isPrizeVisible, setIsPrizeVisible ] = useState(false);
     const [ isLightActive, setIsLightActive ] = useState(false);
+    const isBonusWheel = useSelector((state: RootState) => state.jackpotJunction.isBonusWheel);
     // contract
     const { chain } = useAccount();
     const writeTxn = useTransactor();
@@ -479,11 +482,11 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
                     <div className="px-2 text-start relative bg-[url('/jackpotWheel/banner-small.png')] bg-cover bg-center flex flex-col font-ibmPlexMono 
                         top-[-85px] xs:top-[-90px] lg:top-[-90px] 4xl:top-[-110px] 
                         left-[-10px] xs:left-[-10px] lg:left-[-20px] 4xl:left-[-55px]
+                        aspect-[98/67]
                         w-[85px] xs:w-[118px] lg:w-[159px] 4xl:w-[396px] 
-                        h-[64px] xs:h-[89px] lg:h-[119px] 4xl:h-[297px]
                         pt-[10px] 4xl:pt-[2rem]
                     ">
-                       <p className="text-xs 4xl:text-4xl text-white m-0 p-0">
+                       <p className="text-xs 4xl:text-4xl text-[#A340C4] m-0 p-0">
                             Small
                         </p>
                     {
@@ -496,20 +499,20 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
                         </div>
                     }
                     </div>
-                    <div className="relative z-10 bg-[url('/jackpotWheel/banner-jackpot.png')] bg-cover bg-center flex flex-col font-ibmPlexMono px-[-5px] 
+                    <div className="relative z-10 bg-[url('/jackpotWheel/banner-jackpot.png')] bg-cover bg-center flex flex-col font-jost px-[-5px] 
                         top-[-110px] xs:top-[-120px] lg:top-[-140px] 4xl:top-[-200px]
+                        aspect-[2/1]
                         w-[128px] xs:w-[218px] lg:w-[291px] 4xl:w-[726px]
-                        h-[39px] xs:h-[65px] lg:h-[87px] 4xl:h-[217px]
                         pt-[0.3rem] 4xl:pt-[1.2rem]
                     ">
-                        <p className="font-semibold text-xs xs:text-sm lg:text-base 4xl:text-5xl p-0 m-0 text-black">
+                        <p className="font-extrabold font-[jost] text-xs xs:text-sm lg:text-3xl 4xl:text-5xl p-0 m-0 text-[#3D088F] pt-5">
                             JACKPOT 
                         </p>
-                        <div className="flex w-full justify-center">
-                            <div className="w-full h-full font-bold text-black text-sm xs:text-xl lg:text-3xl 4xl:text-6xl">
+                        <div className="flex grow w-full">
+                            <div className="flex justify-center w-full h-full font-bold text-black text-sm xs:text-xl lg:text-3xl 4xl:text-6xl pt-2">
                                 { 
                                     deployedContractData &&
-                                    <JackpotBalance address={deployedContractData.address} />
+                                    <JackpotBalance address={deployedContractData.address}/>
                                 }
                             </div>
                         </div>
@@ -518,10 +521,10 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
                         top-[-85px] xs:top-[-90px] lg:top-[-90px] 4xl:top-[-108px] 
                         left-[10px] xs:left-[10px] lg:left-[20px] 4xl:left-[55px]
                         w-[85px] xs:w-[118px] lg:w-[159px] 4xl:w-[396px]
-                        h-[64px] xs:h-[89px] lg:h-[119px] 4xl:h-[297px]
+                        aspect-[98/67]
                         pt-[10px] 4xl:pt-[2rem]
                     ">
-                       <p className="text-xs 4xl:text-4xl text-white m-0 p-0">
+                       <p className="text-xs 4xl:text-4xl text-[#A340C4] m-0 p-0">
                             Medium
                         </p>
                         <div className="lg:pt-1 flex flex-wrap grow justify-end w-full">
@@ -534,19 +537,33 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
                 </div>
             </div>
             <div className="relative h-full w-full flex justify-center items-center">
-                <animated.div
+                <div 
                     className="
-                        z-[10] sm:border sm:border-[black] sm:border-[5px] relative flex justify-center items-center my-4 rounded-[50%]
-                        w-[250px] h-[250px] w-[250px] h-[250px] xs:w-[400px] xs:h-[400px] lg:w-[530px] lg:h-[530px] 4xl:w-[1320px] 4xl:h-[1320px]
-                    "
-                    style={{ 
-                        transform: rotateSpring.rotation.to((r) => {
-                            return `rotate(${r}deg)`
-                        })
-                    }}
+                        relative sm:border sm:border-[black] sm:border-[5px] relative flex justify-center items-center my-4 rounded-[50%]
+                        w-[250px] h-[250px] w-[250px] h-[250px] xs:w-[400px] xs:h-[400px] lg:w-[530px] lg:h-[530px] 4xl:w-[1320px] 4xl:h-[1320px]"
                 >
-                    <CircleWithSlices />
-                </animated.div>
+                    { isBonusWheel ? 
+                    <div className="absolute z-[15] overflow-hidden flex items-center justify-center rounded-full w-[25%] h-[25%] bg-[#E2003F] border-solid border-[5px] border-black">
+                        <div className="flex justify-center items-center w-full font-bold bg-[white] text-[#E2003F] text-xs lg:text-xl xs:py-1 sm:py-2 lg:px-3 font-extrabold">
+                            BONUS!
+                        </div>
+                    </div>
+                    : null}
+                    
+                    <animated.div
+                        className="
+                            z-[10] 
+                            w-full h-full
+                        "
+                        style={{ 
+                            transform: rotateSpring.rotation.to((r) => {
+                                return `rotate(${r}deg)`
+                            })
+                        }}
+                    >
+                        <CircleWithSlices />
+                    </animated.div>
+                </div>
                 
                 <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
                     <div 
@@ -597,7 +614,7 @@ export const JackpotWheel = (props:JackpotWheelProps) => {
                         : '120'
                     } 
                     viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20 4 L35 40 Q20 40 5 40 Z" fill="white"/>
+                    <path d="M20 4 L35 40 Q20 40 5 40 Z" fill="red" stroke='white'/>
                 </svg>
             </div>    
         </div>
