@@ -42,11 +42,13 @@ export interface PrizePool {
 import { useLocalStoragePreferences } from "@/hooks/cosmic-engine";
 import { useBlockNumber } from "wagmi";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
+import { useDispatch } from 'react-redux';
+import { setIsBonusWheel } from '~~/store/jackpotJunctionSlice';
 
 export const JackpotJunction = () => {
     // press ` to toggle cosmic console
     const cosmicConsole = useGlobalState(state => state.cosmicConsole);
-
+    const dispatch = useDispatch();
     const { targetNetwork } = useTargetNetwork();
 
     const [ wheelState, setWheelState ] = useState('notMoving');
@@ -88,6 +90,21 @@ export const JackpotJunction = () => {
         contractName: JJ_CONTRACT_NAME,
         functionName: "CostToReroll",
     });
+
+    //how do i fix this nested hook issue
+    const { data: hasBonus } = useScaffoldReadContract({
+        contractName: JJ_CONTRACT_NAME,
+        functionName: "hasBonus",
+        args: [address]
+    });
+
+    useEffect(() => {
+        if(hasBonus){
+            dispatch(setIsBonusWheel(true));
+        } else {
+            dispatch(setIsBonusWheel(false));
+        }
+    }, [hasBonus]);
 
     useEffect(() => {
         if(prizeWon){
