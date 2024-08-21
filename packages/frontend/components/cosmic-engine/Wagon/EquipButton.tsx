@@ -67,7 +67,7 @@ const EquipButton = ({
     };
 
     return (
-        <button className="absolute bottom-0 left-1/2 transform -translate-x-1/2 m-1 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+        <button className="absolute bottom-0 left-1/2 transform -translate-x-1/2 m-1 bg-[white] hover:bg-[#f3f3f3] text-[black] font-bold font-jost py-2 px-4 rounded w-full"
         onClick={handleClick}
         >
             Equip

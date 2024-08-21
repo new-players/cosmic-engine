@@ -65,7 +65,7 @@ const CraftButton = ({
     };
 
     return (
-        <button className="disabled absolute bottom-0 left-1/2 transform -translate-x-1/2 m-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        <button className="text-sm disabled absolute bottom-0 left-1/2 transform -translate-x-1/2 m-1 bg-[#FF7200] hover:bg-[#FF5200] text-white font-bold font-jost py-2 px-4 rounded "
         onClick={handleClick}
         >
             { isPending ? "..." : "Upgrade"}

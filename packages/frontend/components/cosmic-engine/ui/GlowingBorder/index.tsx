@@ -7,13 +7,19 @@ type GlowingBorderProps = {
   };
   
 
-const GlowingBorder: FC<GlowingBorderProps> = ({ children, tier }) => {
+const GlowingBorder: FC<GlowingBorderProps> = ({ children, tier, isGlowing }) => {
     return (
         <div className="relative w-full h-full">
-            <div className={`${styles[`glowing-card-tier${tier < 7 ? tier : 7}`]}`} 
-            >
-                {children}
-            </div>
+            {  isGlowing ?
+                <div className={`${styles[`glowing-card-tier${tier < 7 ? tier : 7}`]} relative `} 
+                >
+                    {children}
+                </div>
+            :
+                <div className="w-full h-full p-[0.7rem] flex justify-center items-center border-solid border-[white] border-[3px] bg-[#1B1B1B]">
+                    {children}
+                </div>
+            }
         </div>
     );
 }

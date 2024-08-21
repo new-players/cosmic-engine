@@ -42,18 +42,18 @@ export default function Inventory ({
                         ? {outline: "2px solid red", backgroundColor: TIER_COLORS[tier]} 
                         : {backgroundColor: TIER_COLORS[tier]}}
                 >
-                    <GlowingBorder tier={tier}>
+                    <GlowingBorder tier={tier} isGlowing={!!(parseInt(item.amount) >= 1)}>
                         <Image 
                             src={item.base64image} 
                             alt={item.name} 
                             width={100}
                             height={100}
-                            style={
-                                item.amount === '0' ?
-                                {
-                                filter: 'grayscale(100%) brightness(25%)',
-                                }: {}
-                            }                                            
+                            // style={
+                            //     item.amount === '0' ?
+                            //     {
+                            //     filter: 'grayscale(100%) brightness(25%)',
+                            //     }: {}
+                            // }                                            
                         />                    
                         <div className={`${parseInt(item.amount) >= CRAFT_COST ? 'bg-blue-500' : 'bg-gray-500'}
                         absolute -top-4 -right-2 m-1 rounded-full text-white text-center w-6 h-6 flex items-center justify-center`}>{item.amount}</div>
@@ -69,7 +69,7 @@ export default function Inventory ({
                         {
                             item === selectedItem && (
                                 parseInt(item.amount) >= CRAFT_COST && 
-                                <div className="absolute -bottom-1 left-10 right-1/2">
+                                <div className="absolute -bottom-1 left-10 right-1/2 z-[50]">
                                 <CraftButton 
                                     item={item} 
                                     tier={tier} 
@@ -78,7 +78,10 @@ export default function Inventory ({
                                     />                            
                                 </div>
                             )
-                        }                    
+                        }           
+                        <div className="absolute w-full border bg-[white] bottom-0 font-bold text-center font-jost text-black">
+                            Tier {tier}
+                        </div>         
                     </GlowingBorder>
                 </div>
             ))}
