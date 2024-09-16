@@ -1,6 +1,7 @@
 import { NeynarFrameCreationRequest } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 import neynarClient from "../../../../../utils/neynarClient";
 import { GlifHelper } from "../../../../../utils/glifHelper";
+import { write_payload } from "../../../../../utils/databaseHelper";
 
 const glifClient = new GlifHelper(process.env.GLIF_ENDPOINT ?? '');
 
@@ -82,4 +83,25 @@ export async function POST(req: Request) {
 export async function GET() {
   console.log("get received")
   return new Response("nice one", {status: 200})
+}
+
+async function write_data(hash: string, payload: string){
+  const query = `
+    INSERT INTO articles(hash, payload)
+    VALUES(?, ?)
+  `;
+  const values = [hash, payload];
+  let status, respBody;
+  await write_payload(query, values)
+    .then(() => {
+      status = 200;
+      respBody = { message: "Successfully created data" };
+    })
+    .catch((err) => {
+      status = 400;
+      respBody = err;
+    });
+    return Response.json(respBody, {
+      status,
+    });
 }

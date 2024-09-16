@@ -27,7 +27,7 @@ export class GlifHelper {
         ),
       });
 
-      console.log(`request to glif api: ${apiResponse}`)
+      console.log(`request to glif api: ${apiResponse.status}, ${apiResponse.statusText}`)
       return apiResponse?.data?.output;
     } catch (error) {
       throw new Error('Error Glif request failed: ' + error);
