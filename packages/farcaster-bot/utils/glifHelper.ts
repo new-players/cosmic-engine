@@ -59,7 +59,7 @@ export class GlifHelper {
       result = await this.sendGlifAPiRequest(payload);
     } else if (outputType === 'SPARK') {
       const payload = {
-        "id": "clyrcr6kb000012ntpmoa5wzb",
+        "id": "clzh7mhzg000e8msdwbb6u0hw",
         "inputs": prompObject
       }
       result = await this.sendGlifAPiRequest(payload);
