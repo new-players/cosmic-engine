@@ -89,7 +89,7 @@ export async function POST(req: Request) {
 
 async function sendMessage(body: Record<string, any>): Promise<string> {
   try {
-    const url = 'https://hooks.slack.com/services/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';
+    const url = process.env.SLACK_WEBHOOK_ENDPOINT;
     const apiResponse = await axios({
       url,
       method: 'POST',
